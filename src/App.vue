@@ -2,11 +2,15 @@
   <div id="app">
     <img src="./assets/logo.png">
     <router-view/>
+    <demo></demo>
   </div>
 </template>
 
 <script>
+import demo from "./components/demo";
+
 export default {
+  components: { demo },
   name: 'App'
 }
 </script>
