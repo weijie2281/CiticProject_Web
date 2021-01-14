@@ -1,13 +1,16 @@
 <template>
-  <div class="app-wrapper">
-    <admin-menu class="sidebar-container" />
-    <div class="main-container">
-      <div class="fixed-header" >
-        <nav-menu />
-      </div>
-      <app-main></app-main>
-    </div>
-  </div>
+  <el-container id="admin-body">
+    <nav-menu style="position: absolute;width: 98%;z-index: 1;height: 80px">
+    </nav-menu>
+    <el-container>
+      <el-aside style="width: 250px; height: 100%;margin-top: 80px;">
+        <admin-menu/>
+      </el-aside>
+      <el-main style="margin-top: 80px;">
+        <router-view/>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script>
@@ -21,7 +24,7 @@
 </script>
 
 <style scoped>
-  .main-container {
+  /*.main-container {
     min-height: 100%;
     transition: margin-left .28s;
     margin-left: 15%;
@@ -52,5 +55,12 @@
     z-index: 9;
     width: 85%;
     transition: width 0.28s;
+  }*/
+  *{
+    padding: 0;
+    margin: 0;
+  }
+  #admin-body {
+    height: 95vh;
   }
 </style>

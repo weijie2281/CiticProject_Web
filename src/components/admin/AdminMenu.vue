@@ -7,9 +7,9 @@
       background-color="#304156"
       text-color="#fff"
       active-text-color="#ffd04b">
-      <div class="side-header">
+      <!--<div class="side-header">
         <p>Online Banking</p>
-      </div>
+      </div>-->
       <template v-for="(item,i) in adminMenus">
         <!--index 没有用但是必需字段且为 string -->
         <el-submenu :key="i" :index="i + ''" style="text-align: left">
@@ -32,7 +32,15 @@
     name: 'AdminMenu',
     data () {
       return {
-        adminMenus: []
+        adminMenus: [
+          {
+            path: '', name: '', component: '', iconCls: 'el-icon-menu', nameZh: '参考',
+            children: [{
+              path: '/', name: '', component: '', icon: 'el-icon-minus', nameZh: '参考选项'
+            }, {
+              path: '/login', name: 'Login', component: 'Login', icon: 'el-icon-menu', nameZh: '参考选项'}]
+          },
+           ]
       }
     },
     created () {
