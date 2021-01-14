@@ -1,0 +1,78 @@
+
+.el-menu-admin {
+  position: absolute;
+  width: 250px;
+  height: 100%;
+}
+
+.table_class {
+  position: relative;
+  margin: 40px 100px;
+}
+
+.login_box {
+  border-radius: 15px;
+  background-clip: padding-box;
+  margin: 250px auto;
+  width: 350px;
+  padding: 35px 35px 15px 35px;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 0 25px #cac6c6;
+}
+
+.el_button_class {
+  width: 100%;
+  background: #505458;
+  border: none;
+}
+
+.login_title {
+  margin: 0px auto 40px auto;
+  text-align: center;
+  color: #505458;
+}
+
+.poster {
+  background:url("../img/login_backgroud.jpg") no-repeat;
+  background-position: center;
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  position: fixed;
+}
+
+.el_menu_nav a {
+  text-decoration: none;
+  color: #222;
+  float: right;
+  padding: 20px;
+}
+
+.el_menu_nav span {
+  position: absolute;
+  padding-top: 20px;
+  right: 15%;
+  /*float: right;*/
+  font-size: 20px;
+  /*font-weight: bold;*/
+  pointer-events: none;
+}
+
+.el_menu_nav .el-icon-menu {
+  float:right;
+  font-size: 45px;
+  color: #222;
+  padding-top: 8px;
+}
+
+.el-icon-switch-button {
+  cursor: pointer;
+  outline:0;
+  float:right;
+  font-size: 40px;
+  color: #222;
+  padding: 10px;
+}
+
+
