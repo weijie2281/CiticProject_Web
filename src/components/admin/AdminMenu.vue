@@ -1,7 +1,6 @@
 <template>
   <div>
     <el-menu
-      :default-active="'/admin/user/basic'"
       router
       style="height: 100%;"
       mode="vertical"
@@ -29,47 +28,18 @@
 </template>
 
 <script>
-  // import Demo from './admin/Demo'
   export default {
     name: 'AdminMenu',
-    // data () {
-    //   return {
-    //     adminMenus: '',
-    //   }
-    // },
-    // created () {
-    //   this.getAdminMenus()
-    // },
-    // methods: {
-    //   getAdminMenus () {
-    //     setTimeout(()=>{
-    //       console.log("comp", this.$store.state.adminMenus)
-    //       this.adminMenus = this.$store.state.adminMenus
-    //     },100)
-    //     // console.log("comp", this.$store.state.adminMenus)
-    //     // this.adminMenus = this.$store.state.adminMenus
-    //   }
-    // }
     data () {
       return {
         adminMenus: []
       }
     },
     created () {
-      this.getMenuData()
+      // this.getMenuData()
     },
     methods: {
-      getMenuData () {
-        this.axios
-          .get('/crud/getAdminMenu')
-          .then(response => {
-            let responseData = response.data
-            this.adminMenus = responseData
-          })
-          .catch(function (error) { // 请求失败处理
-            console.log(error)
-          })
-      }
+
     }
   }
 </script>
@@ -90,16 +60,4 @@
   .nest-menu:hover {
     background-color: #001528 !important;
   }
-  /*.sidebar-container {*/
-  /*  transition: width 0.28s;*/
-  /*  width: 15%;*/
-  /*  height: 100%;*/
-  /*  position: fixed;*/
-  /*  font-size: 0px;*/
-  /*  top: 0;*/
-  /*  bottom: 0;*/
-  /*  left: 0;*/
-  /*  z-index: 1001;*/
-  /*  overflow: hidden;*/
-  /*}*/
 </style>
