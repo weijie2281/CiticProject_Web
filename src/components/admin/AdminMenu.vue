@@ -1,15 +1,16 @@
 <template>
   <div>
     <el-menu
+      :default-active="'/admin/user/basic'"
       router
       style="height: 100%;"
       mode="vertical"
       background-color="#304156"
       text-color="#fff"
       active-text-color="#ffd04b">
-      <!--<div class="side-header">
+      <div class="side-header">
         <p>Online Banking</p>
-      </div>-->
+      </div>
       <template v-for="(item,i) in adminMenus">
         <!--index 没有用但是必需字段且为 string -->
         <el-submenu :key="i" :index="i + ''" style="text-align: left">
@@ -28,28 +29,49 @@
 </template>
 
 <script>
-  export default {
-    name: 'AdminMenu',
-    data () {
-      return {
-        adminMenus: [
-          {
-            path: '', name: '', component: '', iconCls: 'el-icon-menu', nameZh: '参考',
-            children: [{
-              path: '/', name: '', component: '', icon: 'el-icon-minus', nameZh: '参考选项'
-            }, {
-              path: '/login', name: 'Login', component: 'Login', icon: 'el-icon-menu', nameZh: '参考选项'}]
-          },
-           ]
-      }
-    },
-    created () {
-      // this.getMenuData()
-    },
-    methods: {
-
+    // import Demo from './admin/Demo'
+    export default {
+        name: 'AdminMenu',
+        data () {
+            return {
+                adminMenus: '',
+            }
+        },
+        created () {
+            this.getAdminMenus()
+        },
+        methods: {
+            getAdminMenus () {
+                setTimeout(()=>{
+                    console.log("comp", this.$store.state.adminMenus)
+                    this.adminMenus = this.$store.state.adminMenus
+                },100)
+                // console.log("comp", this.$store.state.adminMenus)
+                // this.adminMenus = this.$store.state.adminMenus
+            }
+        }
+        // data () {
+        //   return {
+        //     adminMenus: []
+        //   }
+        // },
+        // created () {
+        //   this.getMenuData()
+        // },
+        // methods: {
+        //   getMenuData () {
+        //     this.axios
+        //       .get('http://localhost:8080/crud/getAdminMenu')
+        //       .then(response => {
+        //         let responseData = response.data
+        //         this.adminMenus = responseData
+        //       })
+        //       .catch(function (error) { // 请求失败处理
+        //         console.log(error)
+        //       })
+        //   }
+        // }
     }
-  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -68,4 +90,16 @@
   .nest-menu:hover {
     background-color: #001528 !important;
   }
+  /*.sidebar-container {*/
+  /*  transition: width 0.28s;*/
+  /*  width: 15%;*/
+  /*  height: 100%;*/
+  /*  position: fixed;*/
+  /*  font-size: 0px;*/
+  /*  top: 0;*/
+  /*  bottom: 0;*/
+  /*  left: 0;*/
+  /*  z-index: 1001;*/
+  /*  overflow: hidden;*/
+  /*}*/
 </style>

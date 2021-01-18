@@ -1,16 +1,4 @@
 <template>
-<!--  <el-container id="admin-body">-->
-<!--    <nav-menu style="position: absolute;width: 98%;z-index: 1;height: 80px">-->
-<!--    </nav-menu>-->
-<!--    <el-container>-->
-<!--      <el-aside style="width: 250px; height: 100%;margin-top: 80px;">-->
-<!--        <admin-menu/>-->
-<!--      </el-aside>-->
-<!--      <el-main style="margin-top: 80px;">-->
-<!--        <router-view/>-->
-<!--      </el-main>-->
-<!--    </el-container>-->
-<!--  </el-container>-->
   <div class="app-wrapper">
     <admin-menu class="sidebar-container" />
     <div class="main-container">
@@ -23,9 +11,9 @@
 </template>
 
 <script>
-  import NavMenu from './common/NavMenu'
-  import AdminMenu from './admin/AdminMenu'
-  import AppMain from './AppMain'
+  import NavMenu from '../common/NavMenu'
+  import AdminMenu from '../admin/AdminMenu'
+  import AppMain from '../AppMain'
   export default {
     name: 'Home',
     components: {AppMain, NavMenu, AdminMenu}
