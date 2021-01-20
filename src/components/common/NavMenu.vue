@@ -1,7 +1,7 @@
 <template>
   <el-card class="admin-header">
-    <a href="/">
-      <img src="../../assets/logo.png" alt="CITIC">
+    <a href="/index">
+      <img src="../../assets/img/logo.jpg" alt="CITIC">
     </a>
     <span>Online Banking System</span>
 <!--    <i class="el-icon-menu"/>-->
@@ -48,6 +48,7 @@
   .admin-header img {
     float: left;
     margin-top: -5px;
+    margin-left: 20px;
     width: 55px;
   }
 
