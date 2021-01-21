@@ -10,6 +10,15 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    // proxyTable: {
+    //   '/7979': {
+    //     target: 'http://localhost:8091', //后期可以改
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^/7979': '/7979'
+    //     }
+    //   }
+    // },
     proxyTable: {
       '/crud': {
         target: 'http://localhost:8080', //后期可以改

@@ -27,7 +27,7 @@ const formatRoutes = (routes) => {
     let fmtRoute = {
       path: route.path,
       component: resolve => {
-        require(['./components/admin/' + route.component + '.vue'], resolve)
+        require(['./components/' + route.component + '.vue'], resolve)
       },
       name: route.name,
       nameZh: route.nameZh,

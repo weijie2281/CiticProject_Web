@@ -5,17 +5,21 @@
       <h3 class="login_title">用户注册</h3>
       <el-form-item prop="username">
         <el-input type="text" v-model="loginForm.username"
-                  auto-complete="off" placeholder="账号"></el-input>
+                  auto-complete="off" placeholder="账号"><template slot="prepend">用户名</template></el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input type="password" v-model="loginForm.password"
-                  auto-complete="off" placeholder="密码"></el-input>
+                  auto-complete="off" placeholder="密码"><template slot="prepend">密码</template></el-input>
+      </el-form-item>
+      <el-form-item prop="email">
+        <el-input type="text" v-model="loginForm.email"
+                  auto-complete="off" placeholder="邮箱"><template slot="prepend">邮箱</template></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="el_button_class" v-on:click="register">Register</el-button>
+        <el-button type="primary" class="el_button_class" v-on:click="register">注册</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="el_button_class" v-on:click="goBack">Back</el-button>
+        <el-button type="primary" class="el_button_class" v-on:click="goBack">返回</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -53,7 +57,8 @@
         checked: true,
         loginForm: {
           username: '',
-          password: ''
+          password: '',
+          email: ''
         },
         loading: false,
         rules: {
@@ -74,8 +79,10 @@
           if (valid) {
             this.axios
               .post('/crud/register', {
-                username: this.loginForm.username.toLowerCase(),
-                password: this.loginForm.password
+              // .post('/7979/login/register', {
+                username: this.loginForm.username,
+                password: this.loginForm.password,
+                email: this.loginForm.email
               })
               .then(resp => {
                 if (resp.data.code === 200) {

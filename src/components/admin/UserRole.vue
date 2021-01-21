@@ -6,11 +6,11 @@
       <el-breadcrumb-item>角色配置</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="角色名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-input v-model="listQuery.rolename" placeholder="角色名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+<!--      <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">-->
+<!--        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />-->
+<!--      </el-select>-->
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
@@ -86,18 +86,15 @@
         // 默认数据总数
         totalCount: 20,
 
-        listLoading: true,
+        listLoading: false,
         sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-        statusOptions: ['启用', '禁用'],
         listQuery: {
           page: 1,
           limit: 20,
-          importance: undefined,
+          rolename: undefined,
           title: undefined,
-          type: undefined,
           sort: '+id'
         },
-        importanceOptions: [1, 2, 3],
       }
     },
     created () {
@@ -158,6 +155,23 @@
         // this.resetTemp()
         // this.dialogStatus = 'create'
         this.$refs.roleEdit.dialogFormVisible = true
+      },
+      handleFilter() {
+          // this.listQuery.page = 1
+          // this.getList()
+      },
+      // 每页显示数据量变更
+      handleSizeChange: function (val) {
+          this.pagesize = val
+          // this.getTableData(this.currentPage, this.pagesize)
+          this.getTableData()
+      },
+
+      // 页码变更
+      handleCurrentChange: function (val) {
+          this.currentPage = val
+          // this.getTableData(this.currentPage, this.pagesize)
+          this.getTableData()
       },
     }
   }

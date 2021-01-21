@@ -6,17 +6,14 @@
       <el-breadcrumb-item>用户信息</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.importance" placeholder="状态" clearable style="width: 90px" class="filter-item">
+      <el-input v-model="listQuery.username" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-select v-model="listQuery.status" placeholder="状态" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
       </el-select>
-<!--      <el-select v-model="listQuery.type" placeholder="Type" clearable class="filter-item" style="width: 130px">-->
-<!--        <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />-->
+<!--      <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">-->
+<!--        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />-->
 <!--      </el-select>-->
-      <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
@@ -106,8 +103,8 @@
     data () {
       return {
         users: [],
-        // value2: 1
         tableData: [],
+
         // 默认每页数据量
         pagesize: 5,
         // 当前页码
@@ -117,18 +114,17 @@
         // 默认数据总数
         totalCount: 20,
 
-        listLoading: true,
+        listLoading: false,
         sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
         statusOptions: ['启用', '禁用'],
         listQuery: {
           page: 1,
           limit: 20,
-          importance: undefined,
-          title: undefined,
+          status: undefined,
+          username: undefined,
           type: undefined,
           sort: '+id'
         },
-        importanceOptions: [1, 2, 3],
       }
     },
     created () {
@@ -184,6 +180,23 @@
         // this.resetTemp()
         // this.dialogStatus = 'create'
         this.$refs.userEdit.dialogFormVisible = true
+      },
+      handleFilter() {
+          // this.listQuery.page = 1
+          // this.getList()
+      },
+      // 每页显示数据量变更
+      handleSizeChange: function (val) {
+          this.pagesize = val
+          // this.getTableData(this.currentPage, this.pagesize)
+          this.getTableData()
+      },
+
+      // 页码变更
+      handleCurrentChange: function (val) {
+          this.currentPage = val
+          // this.getTableData(this.currentPage, this.pagesize)
+          this.getTableData()
       },
     }
   }

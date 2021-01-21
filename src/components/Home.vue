@@ -24,6 +24,6 @@
 
 <style scoped>
   #admin-body {
-    height: 97vh;
+    height: 100vh;
   }
 </style>

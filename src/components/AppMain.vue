@@ -19,7 +19,8 @@
 <style scoped>
   .app-main {
     /* 50= navbar  50  */
-    min-height: calc(100vh - 50px);
+    /*min-height: calc(100vh - 50px);*/
+    /*height: 100%;*/
     width: 100%;
     position: relative;
     overflow: hidden;

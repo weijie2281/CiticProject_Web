@@ -36,9 +36,10 @@
         var _this = this
         this.axios
           .post('/crud/login', {
-            username: this.loginForm.username.toLowerCase(),
-            password: this.loginForm.password
+              username: this.loginForm.username.toLowerCase(),
+              password: this.loginForm.password
           })
+          // .post('/7979/login/login?username=' + this.loginForm.username + '&password=' + this.loginForm.password)
           .then(response => {
             if (response.data.code === 200) {
               // console.log(123)
