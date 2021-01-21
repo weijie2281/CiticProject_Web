@@ -107,6 +107,33 @@
       this.getList()
     },
     methods: {
+      async query() {
+          this.parames.accNo = this.ruleForm.accNo
+          this.parames.startDate = this.ruleForm.startDate,
+              this.parames.endDate = this.ruleForm.endDate
+          try {
+              const res = await this.axios.get('/crud/admin/acc', { /////////////////////////////////////////////////
+                  params: this.parames
+              })
+              if (res && res.status === 200) {
+                  this.transDetailList = res.data.list
+                  this.listLoading = false
+                  /////////////////////////
+                  // ///////////////////////////////////////////////////////////////遍历
+              }
+          } catch (err) {
+              console.error(err)
+          }
+
+      },
+      reset() {
+          this.ruleForm = {
+              accNo: '',
+              exportFormat:'',
+              startDate:'',
+              endDate:''
+          }
+      },
       /** 查询账户列表 */
       async getList() {
         this.listLoading = true

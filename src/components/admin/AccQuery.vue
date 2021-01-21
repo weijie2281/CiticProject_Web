@@ -123,75 +123,87 @@
   // import Export2Excel from '@/excel/Export2Excel.js'
 	export default {
 		name: 'AccQuery',
-		data() {
-			return {
-				listLoading: true, //默认加载
-				dialogVisible: false, //是否显示弹窗
-        tableData: [], //初始化列表数据
-        accList: [],
-        selectList: [],  // 选中的数据
+    data() {
+        return {
+            dialogVisible: false, //是否显示弹窗
+            listLoading: false, //默认加载/////////////////////////////////////////////////////////
+            tableData: [], //初始化列表数据
+            detailData: {},
+            searchForm: {},
+            selectList: [],  // 选中的数据
+            downloadLoading: false,
+            filename: '',
+            autoWidth: true,
 
-        //分页相关
-        currentPage: 1, //当前页
-        pageSizes: [5, 10, 15, 20], //每页条数集合
-        pageSize: 10, //每页条数
-        total: 0, //总数
-        //搜索条件form model
-				searchForm: {
-					accNo: '',
-          accType: ''
-				},
-				accTypeOptions: [
-					{value: '01', label: '单位'},
-					{value: '02', label: '个人'},
-					{value: '03', label: '内部'}
-				]
-			}
-		},
-		filters: {
-			formatAmount(s, n) { //格式化金额，隔3位加，
-				if (!s) return ''
-				n = n > 0 && n <= 20 ? n : 2
-				if (s.indexOf('.') === -1) {
-					s = parseFloat((s + '').replace(/[^\d]/g, '')).toFixed(2) + ''
-				}
-				let l = s.split('.')[0].split('').reverse(),
-					r = s.split('.')[0],
-					t = ''
-				for (let i = 0; i < l.length; i++) {
-					t += l[i] + ((i + 1) % 3 === 0 && (i + 1) != l.length ? ',' : '')
-				}
-				t = t.split('').reverse().join('')
-				return r ? t + '.' + r.substr(0, 2) : t
-			},
-			currencyTypeFormat(cryTypeCode) {
-				let cryType = "_";
-				switch (cryTypeCode) {
-					case '0':
-						cryType = "人民币"
-						break
-					case '1':
-						cryType = "港元"
-						break
-					case '2':
-						cryType = "美元"
-						break
-					case '3':
-						cryType = "欧元"
-						break
-					case '4':
-						cryType = "英镑"
-						break
-					case '5':
-						cryType = "日元"
-						break
-					case '6':
-						cryType = "新加坡币"
-						break
-				}
-				return cryType
-			}
-		},
+            parames: {
+                accNo: '',
+                accType: '',
+                pageIndex: 1,
+                pageSize: 10
+            },
+            pageTotal: 0,
+            accTypeOptions: [
+                {value: '01', label: '单位'},
+                {value: '02', label: '个人'},
+                {value: '03', label: '内部'}
+            ]
+        }
+    },
+    filters: {
+        formatAmount(s, n) { //格式化金额，隔3位加，
+            if (!s) return ''
+            n = n > 0 && n <= 20 ? n : 2
+            if (s.indexOf('.') === -1) {
+                s = parseFloat((s + '').replace(/[^\d]/g, '')).toFixed(2) + ''
+            }
+            let l = s.split('.')[0].split('').reverse(),
+                r = s.split('.')[0],
+                t = ''
+            for (let i = 0; i < l.length; i++) {
+                t += l[i] + ((i + 1) % 3 === 0 && (i + 1) != l.length ? ',' : '')
+            }
+            t = t.split('').reverse().join('')
+            return r ? t + '.' + r.substr(0, 2) : t
+        },
+        accNoFormat(str) { //账号四位空格
+            if (!str) return str
+            let s = ''
+            for (let i = 0, len= str.length; i <len; i++) {
+                if (i !== 0 && i % 4 === 0) {
+                    s = s + ''
+                }
+                s = s + str[i]
+            }
+            return s
+        },
+        currencyTypeFormat(cryTypeCode) {
+            let cryType = "_";
+            switch (cryTypeCode) {
+                case '0':
+                    cryType = "人民币"
+                    break
+                case '1':
+                    cryType = "港元"
+                    break
+                case '2':
+                    cryType = "美元"
+                    break
+                case '3':
+                    cryType = "欧元"
+                    break
+                case '4':
+                    cryType = "英镑"
+                    break
+                case '5':
+                    cryType = "日元"
+                    break
+                case '6':
+                    cryType = "新加坡币"
+                    break
+            }
+            return cryType
+        }
+    },
 		created() {
 			this.getList()
 		},
