@@ -101,7 +101,7 @@
                   tradeMoney: respForms[i].tradeMoney,
                   tradeTime: respForms[i].tradeTime,
                   tradeStatus: respForms[i].tradeStatus==0?'成功':'失败',
-                  tradeFlag: respForms[i].tradeFlag==0?'转出':'转入',
+                  tradeFlag: respForms[i].tradeFlag==1?'转出':'转入',
                 })
               }
               if (transitionForms.length>0){
@@ -171,7 +171,7 @@
                   tradeMoney: respForms[i].tradeMoney,
                   tradeTime: respForms[i].tradeTime,
                   tradeStatus: respForms[i].tradeStatus==0?'成功':'失败',
-                  tradeFlag: respForms[i].tradeFlag==0?'转出':'转入',
+                  tradeFlag: respForms[i].tradeFlag==1?'转出':'转入',
                 })
               }
               if (transitionForms.length>0){
