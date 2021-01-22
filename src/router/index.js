@@ -13,8 +13,6 @@ import UserBasic from "../components/admin/UserBasic";
 import UserRole from "../components/admin/UserRole";
 import MenuManagement from "../components/admin/MenuManagement";
 import PermissionManagement from "../components/admin/PermissionManagement";
-import AccDetail from "../components/admin/AccDetail";
-import AccQuery from "../components/admin/AccQuery";
 import TradeMain from "../components/transaction/TradeMain";
 import AccountManage from "../components/admin/AccountManage";
 import TradeDetail from "../components/transaction/TradeDetail";
@@ -101,22 +99,7 @@ export default new Router({
             requireAuth: true
           }
         },
-        {
-          path: '/admin/account/query',
-          name: 'AccQuery',
-          component: AccQuery,
-          meta: {
-            requireAuth: true
-          }
-        },
-        {
-          path: '/admin/account/trade',
-          name: 'AccDetail',
-          component: AccDetail,
-          meta: {
-            requireAuth: true
-          }
-        },
+
         {
           path: '/transaction/tradeMain',
           name: 'TradeMain',
