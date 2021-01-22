@@ -37,7 +37,7 @@ export default new Router({
       path: '/accSheetSearch',
       name: 'accSheetSearch',
       component: () => import('../components/account/accSheetSearch')
-    }
+    },
     {
       path: '/home',
       name: 'Home',

@@ -71,12 +71,12 @@ router.beforeEach((to, from, next) => {
     if (to.meta.requireAuth) {
       if (store.state.user.username) {
         // console.log(store.state.user)
-        axios.get('/crud/authentication').then(resp => {
-          if (resp) {
-            // console.log("response")
-            next()
-          }
-        })
+        next()
+        // axios.get('/crud/authentication').then(resp => {
+        //   if (resp) {
+        //     next()
+        //   }
+        // })
       } else {
         next({
           path: 'login',

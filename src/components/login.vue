@@ -35,22 +35,19 @@
       login () {
         var _this = this
         this.axios
-          .post('/crud/login', {
-              username: this.loginForm.username.toLowerCase(),
-              password: this.loginForm.password
-          })
-          // .post('/7979/login/login?username=' + this.loginForm.username + '&password=' + this.loginForm.password)
+          // .post('/crud/login', {
+          //     username: this.loginForm.username.toLowerCase(),
+          //     password: this.loginForm.password
+          // })
+          .post('/7979/login/login?username=' + this.loginForm.username + '&password=' + this.loginForm.password)
           .then(response => {
             if (response.data.code === 200) {
-              // console.log(123)
-              // this.$router.replace({path: '/adminMenu'})
               _this.$store.commit('login', _this.loginForm)
               var path = this.$route.query.redirect
               this.$router.replace({path: path === '/' || path === undefined ? '/home' : path})
-              // window.location.reload()
             }
             else {
-              _this.$message.warning(response.data.message)
+              _this.$message.warning(response.data.msg)
             }
           })
           .catch(function (error) { // 请求失败处理
@@ -60,33 +57,7 @@
       goToRegister () {
         this.$router.replace('/register')
       },
-      checkUsername (event) {
-        // console.log(123)
-        var value = event.target.value
-        // console.log(this.loginForm.username)
-        // console.log(value)
-        // if (!/^\+?[1-9][0-9]*$/.test(value)) {
-        // if (/[^\a-\z\A-\Z0-9]/g.test(value)) {
-        if (/[\W]/g.test(value))  {
-          // console.log(123)
-          // alert('只能正整数');
-          this.$message.warning('只能数字字母')
-          event.target.value = value.replace(/[\W]/g,'');
-          // event.target.value = value.replace(/[\W]/g), '');
-        }
-        console.log(this.loginForm.username)
-      },
-      checkUsername1 (event) {
-        var value = event.target.value
-        console.log(this.loginForm.username)
-        if (/[\W]/g.test(value)) {
-          // alert('只能正整数');
-          this.$message.warning('只能数字字母')
-          this.isValid = true
-        } else {
-          this.isValid = false
-        }
-      }
+
     }
   }
 </script>
