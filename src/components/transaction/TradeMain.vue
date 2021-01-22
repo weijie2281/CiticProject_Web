@@ -40,7 +40,7 @@
             :page-sizes="[5, 10, 15, 20]"
             :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total=this.tradeData.length>
+            :total=this.totalCount>
         </el-pagination>
       </div>
     </div>
@@ -79,7 +79,7 @@
         //加载整个页面
         var _this = this;
         var data = {
-          currentPage: this.currentPage,
+          startPage: this.currentPage,
           pageSize: this.pageSize,
         };
         this.axios
@@ -93,6 +93,7 @@
               const transitionForms=[];
               this.pageSize = pagination.pageSize;
               this.currentPage = pagination.current;
+              this.totalCount = pagination.total;
               for(var i in respForms){
                 transitionForms.push({
                   tradeNum: respForms[i].tradeNum,
@@ -137,7 +138,7 @@
           }
         }
         var data = {
-          currentPage: this.currentPage,
+          startPage: this.start,
           pageSize: this.pageSize,
           //交易流水号
           tradeNum: form.tradeNum,
@@ -163,6 +164,7 @@
               const transitionForms=[];
               this.pageSize = pagination.pageSize;
               this.currentPage = pagination.current;
+              this.totalCount = pagination.total;
               for(var i in respForms){
                 transitionForms.push({
                   tradeNum: respForms[i].tradeNum,
@@ -212,7 +214,7 @@
           }
         }
         var data = {
-          currentPage: this.currentPage,
+          startPage: this.currentPage,
           pageSize: this.pageSize,
           //交易流水号
           tradeNum: form.tradeNum,
@@ -251,16 +253,17 @@
       },
       // 每页显示数据量变更
       handleSizeChange: function (val) {
-        this.pageSize = val
+        this.pageSize = val;
+        this.currentPage = 1;
         // this.getTableData(this.currentPage, this.pageSize)
-        this.getTableData()
+        this.getTradeData()
       },
 
       // 页码变更
       handleCurrentChange: function (val) {
         this.currentPage = val
         // this.getTableData(this.currentPage, this.pageSize)
-        this.getTableData()
+        this.getTradeData()
       },
       dateFormat(date, format) {
         //  处理时间格式的函数
