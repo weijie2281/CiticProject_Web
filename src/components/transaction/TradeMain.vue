@@ -32,11 +32,14 @@
         <el-table-column label="交易时间" prop="tradeTime" width="160px" align="center" sortable/>
       </el-table>
       <div class="page">
-        <el-pagination
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-size="pageSize"
-          :total="tradeData.length">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 10, 15, 20]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total=this.tradeData.length>
         </el-pagination>
       </div>
     </div>
@@ -53,10 +56,14 @@
       return {
         // 金额范围
         minMoney: 0.00,
-        maxMoney: 999999999.99,
-        // 页码
-        currentPage: 1,
+        // 默认每页数据量
         pageSize: 10,
+        // 当前页码
+        currentPage: 1,
+        // 查询的页码
+        start: 1,
+        // 默认数据总数
+        totalCount: 20,
         // 查询后返回的数据，后续替换为tradeData
         // transitionForms: [],
         // 表格中的数据
@@ -97,7 +104,7 @@
               const respForms = resp.data.data.tradeDetailParamList;
               const pagination = resp.data.data.pagination;
               const transitionForms=[];
-              this.pagesize = pagination.pagesize;
+              this.pageSize = pagination.pageSize;
               this.currentPage = pagination.current;
               for(var i in respForms){
                 transitionForms.push({
@@ -166,7 +173,7 @@
               const respForms = resp.data.data.tradeDetailParamList;
               const pagination = resp.data.data.pagination;
               const transitionForms=[];
-              this.pagesize = pagination.pagesize;
+              this.pageSize = pagination.pageSize;
               this.currentPage = pagination.current;
               for(var i in respForms){
                 transitionForms.push({
@@ -253,9 +260,18 @@
             console.log('exportExcel',error)
           });
       },
-      handleCurrentChange: function (currentPage) {
-        //  处理页码的函数
-        this.currentPage = currentPage
+      // 每页显示数据量变更
+      handleSizeChange: function (val) {
+        this.pageSize = val
+        // this.getTableData(this.currentPage, this.pageSize)
+        this.getTableData()
+      },
+
+      // 页码变更
+      handleCurrentChange: function (val) {
+        this.currentPage = val
+        // this.getTableData(this.currentPage, this.pageSize)
+        this.getTableData()
       },
       dateFormat(date, format) {
         //  处理时间格式的函数
