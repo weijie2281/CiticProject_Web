@@ -5,8 +5,10 @@ import AppIndex from '../components/AppIndex'
 import Home from '../components/Home'
 import login from "../components/login";
 import Register from "../components/Register";
-import page404 from '../components/404page'
+
 import page401 from '../components/401page'
+import TradeMain from "../components/transaction/TradeMain";
+import TradeDetail from "../components/transaction/TradeDetail";
 
 Vue.use(Router)
 
@@ -37,7 +39,7 @@ export default new Router({
       path: '/accSheetSearch',
       name: 'accSheetSearch',
       component: () => import('../components/account/accSheetSearch')
-    }
+    },
     {
       path: '/home',
       name: 'Home',
@@ -59,6 +61,16 @@ export default new Router({
           meta: {
             requireAuth: true
           }
+        },
+        {
+          path: '/trade',
+          name: 'tradeMain',
+          component: TradeMain
+        },
+        {
+          path: '/tradeDetail',
+          name: 'tradeDetail',
+          component: TradeDetail
         },
       ]
     },
