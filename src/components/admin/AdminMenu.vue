@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-menu
-      :default-active="'/admin/user/basic'"
+      :default-active="'/transaction/tradeMain'"
       router
       style="height: 100%;"
       mode="vertical"
@@ -38,8 +38,9 @@
         adminMenus: [
             {"id":1,"path":"/admin","name":null,"nameZh":"用户管理","iconCls":"el-icon-user","component":"Home","parentId":0,
                 "children":[
-                    {"id":4,"path":"/admin/user/basic","name":null,"nameZh":"用户信息","iconCls":null,"component":"admin/UserBasic","parentId":1,"children":null},
-                    {"id":5,"path":"/admin/user/role","name":null,"nameZh":"角色配置","iconCls":null,"component":"admin/UserRole","parentId":1,"children":null}
+                    {"id":23,"path":"/profile","name":null,"nameZh":"用户信息","iconCls":null,"component":"admin/profile","parentId":1,"children":null},
+                    // {"id":4,"path":"/admin/user/basic","name":null,"nameZh":"用户信息","iconCls":null,"component":"admin/UserBasic","parentId":1,"children":null},
+                    // {"id":5,"path":"/admin/user/role","name":null,"nameZh":"角色配置","iconCls":null,"component":"admin/UserRole","parentId":1,"children":null}
                     ]},
             // {"id":3,"path":"/admin","name":null,"nameZh":"系统配置","iconCls":"el-icon-s-tools","component":"Home","parentId":0,
             //     "children":[
@@ -50,11 +51,14 @@
             {"id":12,"path":"/admin","name":null,"nameZh":"账户管理","iconCls":"el-icon-s-tools","component":"Home","parentId":0,
                 "children":[
                     {"id":17,"path":"/admin/account/manage","name":null,"nameZh":"账户管理","iconCls":"el-icon-s-tools","component":"admin/AccountManage","parentId":12,"children":null},
-                    {"id":13,"path":"/admin/account/query","name":null,"nameZh":"账户查询","iconCls":"el-icon-s-tools","component":"admin/AccQuery","parentId":12,"children":null},
-                    {"id":14,"path":"/admin/account/trade","name":null,"nameZh":"账户交易明细","iconCls":"el-icon-s-tools","component":"admin/AccDetail","parentId":12,"children":null}]},
+                    {"id":13,"path":"/infoSearch","name":null,"nameZh":"账户余额查询","iconCls":"el-icon-s-tools","component":"account/infoSearch","parentId":12,"children":null},
+                    {"id":14,"path":"/accSheetSearch","name":null,"nameZh":"对账单查询","iconCls":"el-icon-s-tools","component":"account/accSheetSearch","parentId":12,"children":null}]},
             {"id":15,"path":"/transaction","name":null,"nameZh":"交易管理","iconCls":"el-icon-s-tools","component":"Home","parentId":0,
                 "children":[
-                    {"id":16,"path":"/transaction/tradeMain","name":null,"nameZh":"交易查询","iconCls":"el-icon-s-tools","component":"transaction/TradeMain","parentId":15,"children":null}]}
+                    {"id":16,"path":"/transaction/tradeMain","name":null,"nameZh":"交易信息管理","iconCls":"el-icon-s-tools","component":"transaction/TradeMain","parentId":15,"children":null}]},
+            {"id":20,"path":"/customer","name":null,"nameZh":"客户管理","iconCls":"el-icon-s-tools","component":"Home","parentId":0,
+                "children":[
+                    {"id":21,"path":"/customerRecord","name":null,"nameZh":"交易信息管理","iconCls":"el-icon-s-tools","component":"customer/record","parentId":20,"children":null}]}
             ]
       }
     },
@@ -71,30 +75,6 @@
       //   // this.adminMenus = this.$store.state.adminMenus
       // }
     }
-
-
-
-    // data () {
-    //   return {
-    //     adminMenus: []
-    //   }
-    // },
-    // created () {
-    //   this.getMenuData()
-    // },
-    // methods: {
-    //   getMenuData () {
-    //     this.axios
-    //       .get('http://localhost:8080/crud/getAdminMenu')
-    //       .then(response => {
-    //         let responseData = response.data
-    //         this.adminMenus = responseData
-    //       })
-    //       .catch(function (error) { // 请求失败处理
-    //         console.log(error)
-    //       })
-    //   }
-    // }
   }
 </script>
 

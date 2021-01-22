@@ -40,30 +40,10 @@ export default new Router({
       component: Register
     },
     {
-      path: '/infoSearch',
-      name: 'InfoSearch',
-      component: () => import('../components/account/infoSearch')
-    },
-    {
-      path: '/accSheetSearch',
-      name: 'accSheetSearch',
-      component: () => import('../components/account/accSheetSearch')
-    },
-    {
-      path: '/customer',
-      name: 'Customer',
-      component: () => import('../components/customer')
-    },
-    {
-      path: '/customerRecord',
-      name: 'CustomerRecord',
-      component: () => import('../components/customer/record')
-    },
-    {
       path: '/home',
       name: 'Home',
       component: Home,
-      redirect: '/admin/user/basic',
+      redirect: '/transaction/tradeMain',
       children: [
         {
           path: '/index',
@@ -149,6 +129,26 @@ export default new Router({
           path: '/tradeDetail',
           name: 'tradeDetail',
           component: TradeDetail
+        },
+        {
+          path: '/infoSearch',
+          name: 'InfoSearch',
+          component: () => import('../components/account/infoSearch')
+        },
+        {
+          path: '/accSheetSearch',
+          name: 'accSheetSearch',
+          component: () => import('../components/account/accSheetSearch')
+        },
+        {
+          path: '/customer',
+          name: 'Customer',
+          component: () => import('../components/customer')
+        },
+        {
+          path: '/customerRecord',
+          name: 'CustomerRecord',
+          component: () => import('../components/customer/record')
         },
       ]
     },

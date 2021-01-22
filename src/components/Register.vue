@@ -38,16 +38,6 @@
           callback()
         }
       }
-      var validate2 = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('请输入密码'))
-        }
-        if(value&&!((/^(0|([1-9]0){0,1}|[1-9]{1,2}|100)$/).test(value))){
-          callback(new Error('请输入0-100之间包括0和100的正整数'))
-        }else{
-          callback()
-        }
-      }
       var validateUsername = (rule, value, callback) => {
         if(value&&(/[`~!@#$%^&*()_\+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\+={}|《》？：“”【】、；‘’，。、]/g).test(value)){
           callback(new Error('禁止输入特殊字符'));
@@ -116,31 +106,7 @@
             _this.$message.warning('失败')
           }
         })
-        // this.$refs.loginForm.validate((valid) => {
-        //   if (valid) {
-        //     console.log(valid)
-        //   }
-        // })
-        // this.axios
-        //   .post('http://localhost:8080/crud/register', {
-        //     username: this.loginForm.username,
-        //     password: this.loginForm.password
-        //   })
-        //   .then(resp => {
-        //     if (resp.data.code === 200) {
-        //       this.$alert('注册成功', '提示', {
-        //         confirmButtonText: '确定'
-        //       })
-        //       _this.$router.replace('/login')
-        //     } else {
-        //       this.$alert(resp.data.message, '提示', {
-        //         confirmButtonText: '确定'
-        //       })
-        //     }
-        //   })
-        //   .catch(function (error) { // 请求失败处理
-        //     console.log(error)
-        //   })
+
       },
       goBack () {
         this.$router.replace('/login')
