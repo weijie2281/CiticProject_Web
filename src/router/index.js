@@ -17,6 +17,7 @@ import AccDetail from "../components/admin/AccDetail";
 import AccQuery from "../components/admin/AccQuery";
 import TradeMain from "../components/transaction/TradeMain";
 import AccountManage from "../components/admin/AccountManage";
+import TradeDetail from "../components/transaction/TradeDetail";
 
 Vue.use(Router)
 
@@ -133,6 +134,11 @@ export default new Router({
           meta: {
             requireAuth: true
           }
+        },
+        {
+          path: '/tradeDetail',
+          name: 'tradeDetail',
+          component: TradeDetail
         },
       ]
     },
