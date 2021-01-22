@@ -58,7 +58,7 @@
                     {"id":16,"path":"/transaction/tradeMain","name":null,"nameZh":"交易信息管理","iconCls":"el-icon-s-tools","component":"transaction/TradeMain","parentId":15,"children":null}]},
             {"id":20,"path":"/customer","name":null,"nameZh":"客户管理","iconCls":"el-icon-s-tools","component":"Home","parentId":0,
                 "children":[
-                    {"id":21,"path":"/customerRecord","name":null,"nameZh":"交易信息管理","iconCls":"el-icon-s-tools","component":"customer/record","parentId":20,"children":null}]}
+                    {"id":21,"path":"/customerRecord","name":null,"nameZh":"客户档案","iconCls":"el-icon-s-tools","component":"customer/record","parentId":20,"children":null}]}
             ]
       }
     },
