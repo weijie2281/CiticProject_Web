@@ -37,23 +37,23 @@
         <el-col :span="10">
           <el-form-item label="交易日期" prop="startTradeTime">
             <el-date-picker
-              type="date"
+              type="datetime"
               placeholder="请选择开始日期"
               v-model="form.startTradeTime"
-              format="yyyy 年 MM 月 dd 日"
-              value-format="yyyy-MM-dd"
-              :picker-options="pickerOptionsStart"
+              format="yyyy-MM-dd HH:mm:ss"
+              value-format="yyyy-MM-dd  HH:mm:ss"
+              :picker-options="pickerOptionsEnd"
               style="width: 200px"/>
           </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item label="至" prop="endTradeTime" label-width="25px">
             <el-date-picker
-              type="date"
+              type="datetime"
               placeholder="请选择结束日期"
               v-model="form.endTradeTime"
-              format="yyyy 年 MM 月 dd 日"
-              value-format="yyyy-MM-dd"
+              format="yyyy-MM-dd HH:mm:ss"
+              value-format="yyyy-MM-dd  HH:mm:ss"
               :picker-options="pickerOptionsEnd"
               style="width: 200px"/>
           </el-form-item>

@@ -15,10 +15,10 @@
         :default-sort="{prop: 'time',order: 'descending'}"
       >
         <el-table-column label="序号" type="index" width="70px" align="center"/>
-        <el-table-column label="交易流水号" prop="tradeNum" width="260px" align="center"/>
-        <el-table-column label="转入账号" prop="tradeInAccNum" width="200px" align="center"/>
-        <el-table-column label="转出账号" prop="tradeOutAccNum" width="200px" align="center"/>
-        <el-table-column label="交易金额" prop="tradeMoney" width="140px" align="center"/>
+        <el-table-column label="交易流水号" prop="tradeNum" width="225px" align="center"/>
+        <el-table-column label="转入账号" prop="tradeInAccNum" width="180px" align="center"/>
+        <el-table-column label="转出账号" prop="tradeOutAccNum" width="180px" align="center"/>
+        <el-table-column label="交易金额" prop="tradeMoney" width="130px" align="center"/>
         <!--<el-table-column label="交易描述" prop="tradeDescription" width="150px" align="center">
           <template slot-scope="scope">
             <el-tooltip :content="scope.row.tradeDescription" placement="top" popper-class="tooltip">
@@ -28,8 +28,9 @@
             </el-tooltip>
           </template>
         </el-table-column>-->
-        <el-table-column label="交易状态" prop="tradeStatus" width="100px" align="center"/>
-        <el-table-column label="交易时间" prop="tradeTime" width="160px" align="center" sortable/>
+        <el-table-column label="交易状态" prop="tradeFlag" width="90px" align="center"/>
+        <el-table-column label="转入/转出" prop="tradeStatus" width="90px" align="center"/>
+        <el-table-column label="交易时间" prop="tradeTime" width="150px" align="center" sortable/>
       </el-table>
       <div class="page">
           <el-pagination
@@ -68,20 +69,6 @@
         // transitionForms: [],
         // 表格中的数据
         tradeData:[],
-        /*tradeData: [
-          // 交易流水号，转入转出账号，交易金额，交易时间，交易状态
-          // tradeNum、tradeInAccNum、tradeOutAccNum、TradeMoney、TradeTime、TradeStatus
-          {
-            tradeNum: '123456789123456789123456789123456789',
-            tradeInAccNum: '12312341234123412341',
-            tradeOutAccNum: '12312341234123412341',
-            tradeMoney: '999999999.00',
-            tradeTime: '2021-01-19',
-            tradeStatus: '成功',
-            tradeDescription: '备注11111111111111111111111111111111111111111111111111111111111111111' +
-              '111111e22222222222222222222221'
-          }
-        ],*/
       }
     },
     mounted: function () {
@@ -114,6 +101,7 @@
                   tradeMoney: respForms[i].tradeMoney,
                   tradeTime: respForms[i].tradeTime,
                   tradeStatus: respForms[i].tradeStatus==0?'成功':'失败',
+                  tradeFlag: respForms[i].tradeFlag==0?'转出':'转入',
                 })
               }
               if (transitionForms.length>0){
@@ -161,8 +149,8 @@
           startTradeTime: form.startTradeTime,
           endTradeTime: form.endTradeTime ? form.endTradeTime : this.dateFormat(Date.now(), 'yyyy-MM-DD'),
           // 金额范围
-          startMoney: form.startMoney ? form.startMoney : this.minMoney,
-          endMoney: form.endMoney ? form.endMoney : this.maxMoney,
+          startTradeMoney: form.startMoney ? form.startMoney : this.minMoney,
+          endTradeMoney: form.endMoney ? form.endMoney : this.maxMoney,
         };
         console.log('data',data)
         this.axios
@@ -183,6 +171,7 @@
                   tradeMoney: respForms[i].tradeMoney,
                   tradeTime: respForms[i].tradeTime,
                   tradeStatus: respForms[i].tradeStatus==0?'成功':'失败',
+                  tradeFlag: respForms[i].tradeFlag==0?'转出':'转入',
                 })
               }
               if (transitionForms.length>0){
