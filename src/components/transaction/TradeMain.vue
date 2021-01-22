@@ -147,7 +147,7 @@
           tradeOutAccNum: form.tradeOutAccNum,
           // 时间范围
           startTradeTime: form.startTradeTime,
-          endTradeTime: form.endTradeTime ? form.endTradeTime : this.dateFormat(Date.now(), 'yyyy-MM-DD'),
+          endTradeTime: form.endTradeTime ? form.endTradeTime : this.dateFormat(Date.now(), 'yyyy-MM-DD h:m:s'),
           // 金额范围
           startTradeMoney: form.startMoney ? form.startMoney : this.minMoney,
           endTradeMoney: form.endMoney ? form.endMoney : this.maxMoney,
@@ -269,14 +269,17 @@
           const o = {
             yearData: d.getFullYear(),
             monthData: d.getMonth() + 1 < 10 ? `0${d.getMonth() + 1}` : d.getMonth() + 1,
-            dateData: d.getDate() < 10 ? `0${d.getDate()}` : d.getDate()
+            dateData: d.getDate() < 10 ? `0${d.getDate()}` : d.getDate(),
+            hourData: d.getHours()<10?`0${d.getHours()}` : d.getHours(),
+            minuteData: d.getMinutes()<10?`0${d.getMinutes()}` : d.getMinutes(),
+            secondData: d.getSeconds()<10?`0${d.getSeconds()}` : d.getSeconds()
           };
           switch (format) {
-            case 'yyyy-MM-DD':
-              return `${o.yearData}-${o.monthData}-${o.dateData}`;
+            case 'yyyy-MM-DD h:m:s':
+              return `${o.yearData}-${o.monthData}-${o.dateData} ${o.hourData}:${o.minuteData}:${o.secondData}`;
               break;
-            case 'yyyyMMDD':
-              return `${o.yearData}${o.monthData}${o.dateData}`;
+            case 'yyyyMMDD h:m:s':
+              return `${o.yearData}${o.monthData}${o.dateData} ${o.hourData}:${o.minuteData}:${o.secondData}`;
               break;
           }
         } else {
