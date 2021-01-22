@@ -28,22 +28,18 @@
     <!--      </el-form>-->
     <!--    </div>-->
     <div class="tradeStatistics">
-      <!--<div>
-        <span>账户：{{this.acctId}}</span>
+      <div>
+        <span>转入账户：{{accId}}</span>
       </div>
       <div>
-        <span>当月收入总额 ：<b class="green" v-if="test1!==0">{{`+${test2}`}}</b>
+        <span>当月收入总额 ：<b class="green" v-if="inMoney!==0">{{`+￥${inMoney}`}}</b>
         <b v-else>0</b>
         </span>
-        <span>当月支出总额 ：<b class="red" v-if="test2!==0">{{`-${test2}`}}</b>
-        <b v-else>0</b></span>
-      </div>-->
-
-
+      </div>
     </div>
     <div class="TradeTable">
       <el-table
-        :data="DetailData"
+        :data="DetailDataPre"
         border
         :default-sort="{prop: 'time',order: 'descending'}"
       >
@@ -52,26 +48,33 @@
         <el-table-column label="转入账号" prop="tradeInAccNum" width="200px" align="center"/>
         <el-table-column label="转出账号" prop="tradeOutAccNum" width="200px" align="center"/>
         <el-table-column label="交易金额" prop="tradeMoney" width="140px" align="center"/>
-        <!--<el-table-column label="交易描述" prop="tradeDescription" width="150px" align="center">
-          <template slot-scope="scope">
-            <el-tooltip :content="scope.row.tradeDescription" placement="top" popper-class="tooltip">
-              <div class="abbreviation">
-                {{scope.row.tradeDescription}}
-              </div>
-            </el-tooltip>
-          </template>
-        </el-table-column>-->
         <el-table-column label="交易状态" prop="tradeStatus" width="100px" align="center"/>
         <el-table-column label="交易时间" prop="tradeTime" width="160px" align="center" sortable/>
       </el-table>
-      <!--   <div class="page">
-           <el-pagination
-             @current-change="handleCurrentChange"
-             :current-page="currentPage"
-             :page-size="pageSize"
-             :total="transitionForms.length">
-           </el-pagination>
-         </div>-->
+    </div>
+    <div class="tradeStatistics">
+      <div>
+        <span>转出账户：{{accId}}</span>
+      </div>
+      <div>
+        <span>当月支出总额 ：<b class="red" v-if="outMoney!==0">{{`-￥${outMoney}`}}</b>
+        <b v-else>0</b></span>
+      </div>
+    </div>
+    <div class="TradeTable">
+      <el-table
+        :data="DetailDataEnd"
+        border
+        :default-sort="{prop: 'time',order: 'descending'}"
+      >
+        <el-table-column label="序号" type="index" width="70px" align="center"/>
+        <el-table-column label="交易流水号" prop="tradeNum" width="260px" align="center"/>
+        <el-table-column label="转入账号" prop="tradeInAccNum" width="200px" align="center"/>
+        <el-table-column label="转出账号" prop="tradeOutAccNum" width="200px" align="center"/>
+        <el-table-column label="交易金额" prop="tradeMoney" width="140px" align="center"/>
+        <el-table-column label="交易状态" prop="tradeStatus" width="100px" align="center"/>
+        <el-table-column label="交易时间" prop="tradeTime" width="160px" align="center" sortable/>
+      </el-table>
     </div>
   </div>
 </template>
@@ -85,16 +88,13 @@
           accType: '',
           tradeDate: ''
         },
-        test1: 0,
-        test2: '1111',
-        DetailDataEnd: [],
-        DetailDataPre: [],
         currentPage: 1,
         pageSize: 10,
-        acctId: '12312341234123412341',
-        // transitionForms: Array(10).fill(item),
-        // 这个应该是从上一级中取出，后续删除
-        // transitionData: JSON.parse(sessionStorage.getItem('detail')),
+        accId: JSON.parse(sessionStorage.getItem('detail')),
+        inMoney: 0,
+        outMoney: 0,
+        DetailDataEnd: [],
+        DetailDataPre: [],
         DetailData: []
       }
     },
@@ -131,6 +131,7 @@
                   tradeTime: respForms[i].tradeTime,
                   tradeStatus: respForms[i].tradeStatus == 0 ? '成功' : '失败',
                 })
+                this.inMoney = this.inMoney+respForms[i].tradeMoney;
               }
               if (transitionForms.length > 0) {
                 this.DetailDataPre = [];
@@ -169,6 +170,7 @@
                   tradeTime: respForms[i].tradeTime,
                   tradeStatus: respForms[i].tradeStatus == 0 ? '成功' : '失败',
                 })
+                this.outMoney = this.outMoney+respForms[i].tradeMoney;
               }
               if (transitionForms.length > 0) {
                 this.DetailDataEnd = [];
@@ -182,14 +184,6 @@
           .catch(function (error) {
             console.log(error)
           });
-        if (this.DetailDataEnd > 0) {
-          this.DetailDataEnd = [];
-          this.DetailData = [this.DetailDataPre,this.DetailDataEnd];
-        } else {
-          this.DetailDataEnd = [];
-          this.DetailData = this.DetailDataPre;
-        }
-        console.log('DetailData', this.DetailData);
       },
       goBack() {
         this.$router.back();
