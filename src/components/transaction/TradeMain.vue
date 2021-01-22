@@ -16,8 +16,8 @@
       >
         <el-table-column label="序号" type="index" width="70px" align="center"/>
         <el-table-column label="交易流水号" prop="tradeNum" width="260px" align="center"/>
-        <el-table-column label="转入账号" prop="tradeInAccNum" width="201px" align="center"/>
-        <el-table-column label="转出账号" prop="tradeOutAccNum" width="201px" align="center"/>
+        <el-table-column label="转入账号" prop="tradeInAccNum" width="200px" align="center"/>
+        <el-table-column label="转出账号" prop="tradeOutAccNum" width="200px" align="center"/>
         <el-table-column label="交易金额" prop="tradeMoney" width="140px" align="center"/>
         <!--<el-table-column label="交易描述" prop="tradeDescription" width="150px" align="center">
           <template slot-scope="scope">
@@ -106,7 +106,7 @@
                   tradeOutAccNum: respForms[i].tradeOutAccNum,
                   tradeMoney: respForms[i].tradeMoney,
                   tradeTime: respForms[i].tradeTime,
-                  tradeStatus: respForms[i].tradeStatus==1?'成功':'失败',
+                  tradeStatus: respForms[i].tradeStatus==0?'成功':'失败',
                 })
               }
               if (transitionForms.length>0){
@@ -175,7 +175,7 @@
                   tradeOutAccNum: respForms[i].tradeOutAccNum,
                   tradeMoney: respForms[i].tradeMoney,
                   tradeTime: respForms[i].tradeTime,
-                  tradeStatus: respForms[i].tradeStatus==1?'成功':'失败',
+                  tradeStatus: respForms[i].tradeStatus==0?'成功':'失败',
                 })
               }
               if (transitionForms.length>0){
@@ -198,7 +198,6 @@
         this.getTradeData();
       },
       exportExcel() {
-        console.log('excel')
         //  导出Excel
         var _this = this;
         var form = this.$refs.searchBar.form;
@@ -233,17 +232,18 @@
           endMoney: form.endMoney ? form.endMoney : this.maxMoney,
         };
         this.axios
-          .post('/crud/excel/tradeExport', data)
+          .post('/crud/excel/tradeExport', data,{responseType: 'blob'})
           .then(resp => {
             if (resp && resp.status === 200) {
-              // _this.transitionForms = resp.data
-              // let url = window.URL.createObjectURL(new Blob([resp.data]));
-              // let link = document.createElement('a');
-              // link.style.display='none';
-              // link.href=url;
-              // link.setAttribute('download',`交易流水.xlsx`);
-              // document.body.appendChild(link);
-              // link.click()
+              console.log('resp.data',resp.data);
+              _this.transitionForms = resp.data
+              let url = window.URL.createObjectURL(new Blob([resp.data]));
+              let link = document.createElement('a');
+              link.style.display='none';
+              link.href=url;
+              link.setAttribute('download',`交易流水.xlsx`);
+              document.body.appendChild(link);
+              link.click()
             } else {
               console.log('----exportExcel false----');
               this.$message.warning('导出excel失败');
@@ -286,11 +286,11 @@
   .transaction {
     background-color: white;
     width: 100%;
-    height: 100%;
     /*position: ;*/
   }
 
   .searchBar {
+    margin: 10px;
 
   }
 

@@ -78,7 +78,7 @@
         <el-button size="middle" type="primary" icon="el-icon-search" @click="onSearch">搜索</el-button>
         <el-button size="middle" type="primary" icon="el-icon-delete" @click="onReset">重置</el-button>
         <!--  excel导出按钮  -->
-        <el-button size="middle" type="primary" @click="onExport" class="ButtonExcel">导出EXCEL</el-button>
+        <el-button size="middle" type="primary" @click="onExport">导出EXCEL</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -162,8 +162,7 @@
       },
       onExport() {
         // 导出excel
-        this.$emit('exportExcel')
-
+        this.$emit('onExport')
       }
     }
   }
