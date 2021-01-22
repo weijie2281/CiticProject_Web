@@ -15,7 +15,7 @@
         :default-sort="{prop: 'time',order: 'descending'}"
       >
         <el-table-column label="序号" type="index" width="70px" align="center"/>
-        <el-table-column label="交易流水号" prop="tradeNum" width="300px" align="center"/>
+        <el-table-column label="交易流水号" prop="tradeNum" width="260px" align="center"/>
         <el-table-column label="转入账号" prop="tradeInAccNum" width="201px" align="center"/>
         <el-table-column label="转出账号" prop="tradeOutAccNum" width="201px" align="center"/>
         <el-table-column label="交易金额" prop="tradeMoney" width="140px" align="center"/>
@@ -29,7 +29,7 @@
           </template>
         </el-table-column>-->
         <el-table-column label="交易状态" prop="tradeStatus" width="100px" align="center"/>
-        <el-table-column label="交易时间" prop="tradeTime" width="120px" align="center" sortable/>
+        <el-table-column label="交易时间" prop="tradeTime" width="160px" align="center" sortable/>
       </el-table>
       <div class="page">
         <el-pagination
@@ -56,11 +56,12 @@
         maxMoney: 999999999.99,
         // 页码
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 10,
         // 查询后返回的数据，后续替换为tradeData
-        transitionForms: [],
+        // transitionForms: [],
         // 表格中的数据
-        tradeData: [
+        tradeData:[],
+        /*tradeData: [
           // 交易流水号，转入转出账号，交易金额，交易时间，交易状态
           // tradeNum、tradeInAccNum、tradeOutAccNum、TradeMoney、TradeTime、TradeStatus
           {
@@ -73,7 +74,7 @@
             tradeDescription: '备注11111111111111111111111111111111111111111111111111111111111111111' +
               '111111e22222222222222222222221'
           }
-        ],
+        ],*/
       }
     },
     mounted: function () {
@@ -86,19 +87,33 @@
         var data = {
           currentPage: this.currentPage,
           pageSize: this.pageSize,
-          tradeAccNum: '',
-          tradeInAccNum: '',
-          tradeOutAccNum: '',
-          startTradeTime: '',
-          endTradeTime: this.dateFormat(Date.now(), 'yyyy-MM-DD'),
-          startMoney: this.minMoney,
-          endMoney: this.maxMoney,
         };
         this.axios
-          .post('/trade/query', data)
+          .post('/crud/trade/query', data)
           .then(resp => {
             if (resp && resp.status === 200) {
-              _this.transitionForms = resp.data
+              console.log('全查询',resp.data.data)
+              // _this.transitionForms = resp.data
+              const respForms = resp.data.data.tradeDetailParamList;
+              const pagination = resp.data.data.pagination;
+              const transitionForms=[];
+              this.pagesize = pagination.pagesize;
+              this.currentPage = pagination.current;
+              for(var i in respForms){
+                transitionForms.push({
+                  tradeNum: respForms[i].tradeNum,
+                  tradeInAccNum: respForms[i].tradeInAccNum,
+                  tradeOutAccNum: respForms[i].tradeOutAccNum,
+                  tradeMoney: respForms[i].tradeMoney,
+                  tradeTime: respForms[i].tradeTime,
+                  tradeStatus: respForms[i].tradeStatus==1?'成功':'失败',
+                })
+              }
+              if (transitionForms.length>0){
+                this.tradeData=[];
+                this.tradeData=transitionForms;
+              }
+              console.log('this.tradeData',this.tradeData)
             } else {
               console.log('----获取数据失败----')
             }
@@ -130,11 +145,11 @@
           currentPage: this.currentPage,
           pageSize: this.pageSize,
           //交易流水号
-          tradeAccNum: form.tradeAccNum,
+          tradeNum: form.tradeNum,
           // 转入账号
           tradeInAccNum: form.tradeInAccNum,
           // 转出账号
-          TradeOutAccNum: form.tradeOutAccNum,
+          tradeOutAccNum: form.tradeOutAccNum,
           // 时间范围
           startTradeTime: form.startTradeTime,
           endTradeTime: form.endTradeTime ? form.endTradeTime : this.dateFormat(Date.now(), 'yyyy-MM-DD'),
@@ -142,11 +157,32 @@
           startMoney: form.startMoney ? form.startMoney : this.minMoney,
           endMoney: form.endMoney ? form.endMoney : this.maxMoney,
         };
+        console.log('data',data)
         this.axios
-          .post('/trade/query', data)
+          .post('/crud/trade/query', data)
           .then(resp => {
             if (resp && resp.status === 200) {
-              _this.transitionForms = resp.data
+              console.log('resp.data',resp.data.data.tradeDetailParamList);
+              const respForms = resp.data.data.tradeDetailParamList;
+              const pagination = resp.data.data.pagination;
+              const transitionForms=[];
+              this.pagesize = pagination.pagesize;
+              this.currentPage = pagination.current;
+              for(var i in respForms){
+                transitionForms.push({
+                  tradeNum: respForms[i].tradeNum,
+                  tradeInAccNum: respForms[i].tradeInAccNum,
+                  tradeOutAccNum: respForms[i].tradeOutAccNum,
+                  tradeMoney: respForms[i].tradeMoney,
+                  tradeTime: respForms[i].tradeTime,
+                  tradeStatus: respForms[i].tradeStatus==1?'成功':'失败',
+                })
+              }
+              if (transitionForms.length>0){
+                this.tradeData=[];
+                this.tradeData=transitionForms;
+              }
+              console.log('this.tradeData',this.tradeData)
             } else {
               console.log('----searchResult false----');
               this.$message.warning('查询失败');
@@ -162,6 +198,7 @@
         this.getTradeData();
       },
       exportExcel() {
+        console.log('excel')
         //  导出Excel
         var _this = this;
         var form = this.$refs.searchBar.form;
@@ -183,11 +220,11 @@
           currentPage: this.currentPage,
           pageSize: this.pageSize,
           //交易流水号
-          tradeAccNum: form.tradeAccNum,
+          tradeNum: form.tradeNum,
           // 转入账号
           tradeInAccNum: form.tradeInAccNum,
           // 转出账号
-          TradeOutAccNum: form.tradeOutAccNum,
+          tradeOutAccNum: form.tradeOutAccNum,
           // 时间范围
           startTradeTime: form.startTradeTime,
           endTradeTime: form.endTradeTime ? form.endTradeTime : this.dateFormat(Date.now(), 'yyyy-MM-DD'),
@@ -196,17 +233,17 @@
           endMoney: form.endMoney ? form.endMoney : this.maxMoney,
         };
         this.axios
-          .post('/excel/tradeExport', data)
+          .post('/crud/excel/tradeExport', data)
           .then(resp => {
             if (resp && resp.status === 200) {
               // _this.transitionForms = resp.data
-              let url = window.URL.createObjectURL(new Blob([resp.data]));
-              let link = document.createElement('a');
-              link.style.display='none';
-              link.href=url;
-              link.setAttribute('download',`交易流水.xlsx`);
-              document.body.appendChild(link);
-              link.click()
+              // let url = window.URL.createObjectURL(new Blob([resp.data]));
+              // let link = document.createElement('a');
+              // link.style.display='none';
+              // link.href=url;
+              // link.setAttribute('download',`交易流水.xlsx`);
+              // document.body.appendChild(link);
+              // link.click()
             } else {
               console.log('----exportExcel false----');
               this.$message.warning('导出excel失败');
@@ -250,7 +287,7 @@
     background-color: white;
     width: 100%;
     height: 100%;
-    position: absolute;
+    /*position: ;*/
   }
 
   .searchBar {
