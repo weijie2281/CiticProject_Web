@@ -21,12 +21,13 @@
           <el-tag v-else style="color: green">企业</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="ccyCode" label="币种" align="center"></el-table-column>
-      <el-table-column prop="accAttr" label="账户性质" align="center" :formatter="accAttrformat"></el-table-column>
+      <el-table-column prop="ccyCode" label="币种" align="center" :formatter="currencyTypeFormat"></el-table-column>
+      <el-table-column prop="accAttr" label="账户性质" align="center" :formatter="accAttrFormat"></el-table-column>
+      <el-table-column prop="accStatus" label="账户状态" align="center" :formatter="accStatusFormat"></el-table-column>
       <el-table-column prop="accBal" label="余额" align="center" sortable="true">
       </el-table-column>
-      <el-table-column prop="last_update" label="上次更新时间" width="200" align="center" sortable="true">
-        <template slot-scope="scope">{{ scope.row.last_update}}</template>
+      <el-table-column prop="lastUpdate" label="上次更新时间" width="200" align="center" sortable="true">
+        <template slot-scope="scope">{{ scope.row.lastUpdate}}</template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="200" align="center">
         <template slot-scope="scope">
@@ -61,7 +62,7 @@
           <el-input v-model="rowInfo.unitCode" disabled></el-input>
         </el-form-item>
         <el-form-item label="上次更新时间">
-          <el-input v-model="rowInfo.last_update" disabled></el-input>
+          <el-input v-model="rowInfo.lastUpdate" disabled></el-input>
         </el-form-item>
         <el-form-item label="余额">
           <el-input v-model="rowInfo.accBal" disabled></el-input>
@@ -74,91 +75,78 @@
   </div>
 </template>
 <script>
-// import FileSaver from 'file-saver'
-// import XLSX from 'xlsx'
-export default {
-  data() {
-    return {
-      tableDataBegin: [
-        {
-          acctID: '1',
-          custAcct: '1234567888',
-          acctType: 0,
-          ccyCode: '123154567866768787987987878',
-          accAttr: '0',
-          accBal: '1233445.23',
-          last_update: '1491559642000'
-        },
-        {
-          acctID: '123154567866768787987987878',
-          custAcct: '1234567888',
-          acctType: 0,
-          ccyCode: '123154567866768787987987878',
-          accAttr: '1',
-          accBal: '1233445.23',
-          last_update: '1491559642000'
-        },
-        {
-          acctID: '123154567866768787987987878',
-          custAcct: '1234567888',
-          acctType: 1,
-          ccyCode: '123154567866768787987987878',
-          accAttr: '2',
-          accBal: '1233445.23',
-          last_update: '1491559642000'
-        },
-        {
-          acctID: '123154567866768787987987878',
-          custAcct: '1234567888',
-          acctType: 1,
-          ccyCode: '123154567866768787987987878',
-          accAttr: '3',
-          accBal: '1233445.23',
-          last_update: '1491559642000'
-        },
-        {
-          acctID: '123154567866768787987987878',
-          custAcct: '123154567866768787987987878',
-          acctType: 1,
-          ccyCode: '123154567866768787987987878',
-          accAttr: '1',
-          accBal: '1233445.23',
-          last_update: '1491559642000'
-        },
-        {
-          acctID: '123154567866768787987987878',
-          custAcct: '123154567866768787987987878',
-          acctType: 0,
-          ccyCode: '123154567866768787987987878',
-          accAttr: '2',
-          accBal: '1233445.23',
-          last_update: '1491559642000'
-        },
-        {
-          acctID: '123154567866768787987987878',
-          custAcct: '0',
-          acctType: 0,
-          ccyCode: '123154567866768787987987878',
-          accAttr: '王小虎',
-          accBal: '1233445.23',
-          last_update: '1491559642000'
-        }
-      ],
-      tableDataName: '',
-      tableDataEnd: [],
-      currentPage: 1,
-      pageSize: 5,
-      totalItems: 0,
-      filterTableDataEnd: [],
-      flag: false,
-      dialogCheckVisible: false,
-      dialogEditVisible: false,
-      rowInfo: {},
-      multipleSelection: []
-    }
-  },
-  created() {
-    this.axios
+  import FileSaver from 'file-saver'
+  import XLSX from 'xlsx'
+  export default {
+    data() {
+      return {
+        tableDataBegin: [
+          {
+            acctID: '1',
+            custAcct: '1234567888',
+            acctType: '0',
+            ccyCode: '330',
+            accAttr: '002',
+            accBal: '1233445.23',
+            lastUpdate: '1491559642000',
+            accStatus: '001'
+          },
+          {
+            acctID: '2',
+            custAcct: '1234567888',
+            acctType: '1',
+            ccyCode: '330',
+            accAttr: '001',
+            accBal: '1233445.23',
+            lastUpdate: '1491559642000',
+            accStatus: '001'
+          },
+          {
+            acctID: '123154567866768787987987878',
+            custAcct: '1234567888',
+            acctType: '2',
+            ccyCode: '136',
+            accAttr: '2',
+            accBal: '1233445.23',
+            lastUpdate: '1491559642000',
+            accStatus: '001'
+          },
+          {
+            acctID: '123154567866768787987987878',
+            custAcct: '1234567888',
+            acctType: '0',
+            ccyCode: '110',
+            accAttr: '003',
+            accBal: '1233445.23',
+            lastUpdate: '1491559642000',
+            accStatus: '002'
+          },
+          {
+            acctID: '123154567866768787987987878',
+            custAcct: '123154567866768787987987878',
+            acctType: '1',
+            ccyCode: '136',
+            accAttr: '001',
+            accBal: '1233445.23',
+            lastUpdate: '1491559642000',
+            accStatus: '001'
+          }
+        ],
+        tableDataName: '',
+        tableDataEnd: [],
+        currentPage: 1,
+        pageSize: 5,
+        totalItems: 0,
+        filterTableDataEnd: [],
+        flag: false,
+        dialogCheckVisible: false,
+        dialogEditVisible: false,
+        rowInfo: {},
+        multipleSelection: []
+      }
+    },
+    created() {
+      this.axios
 //      .post('/account/accountIndex')
 //      .then(resp => {
 //        if (resp && resp.code === 200) {
@@ -178,113 +166,7 @@ export default {
 //      .catch(function (error) {
 //        console.log(error)
 //      });
-    this.totalItems = this.tableDataBegin.length
-    if (this.totalItems > this.pageSize) {
-      for (let index = 0; index < this.pageSize; index++) {
-        this.tableDataEnd.push(this.tableDataBegin[index])
-      }
-    } else {
-      this.tableDataEnd = this.tableDataBegin
-    }
-  },
-  filters: {
-    dateFormat(row, column) { //格式化时间戳/////////////////////////////////////////////////////////////////
-      var date = row[column.property];
-      if (date == undefined) {
-        return "";
-      }
-      return moment(date).format("YYYY-MM-DD HH:mm:ss");
-    },
-    accNoFormat(str) { //账号四位空格
-      if (!str) return str
-      let s = ''
-      for (let i = 0, len = str.length; i < len; i++) {
-        if (i !== 0 && i % 4 === 0) {
-          s = s + ' '
-        }
-        s = s + str[i]
-      }
-      return s
-    },
-    currencyTypeFormat(cryTypeCode) {
-      let cryType = "_";
-      switch (cryTypeCode) {
-        case '0':
-          cryType = "人民币"
-          break
-        case '1':
-          cryType = "港元"
-          break
-        case '2':
-          cryType = "美元"
-          break
-        case '3':
-          cryType = "欧元"
-          break
-        case '4':
-          cryType = "英镑"
-          break
-        case '5':
-          cryType = "日元"
-          break
-        case '6':
-          cryType = "新加坡币"
-          break
-      }
-      return cryType
-    }
-  },
-  methods: {
-    //前端搜索功能需要区分是否检索,因为对应的字段的索引不同
-    //用两个变量接收currentChangePage函数的参数
-    search() {
-      if (this.tableDataName == '') {
-        this.$message.warning('查询条件不能为空！')
-        return
-      }
-      this.tableDataEnd = []
-      //每次手动将数据置空,因为会出现多次点击搜索情况
-      this.filterTableDataEnd = []
-      this.tableDataBegin.forEach((value, index) => {
-        if (value.custAcct) {
-          if (value.custAcct.indexOf(this.tableDataName) >= 0) {
-            this.filterTableDataEnd.push(value)
-          }
-        }
-      })
-      //页面数据改变重新统计数据数量和当前页
-      this.currentPage = 1
-      this.totalItems = this.filterTableDataEnd.length
-      //渲染表格,根据值
-      this.currentChangePage(this.filterTableDataEnd)
-      //页面初始化数据需要判断是否检索过
-      this.flag = true
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val
-      //需要判断是否检索
-      if (!this.flag) {
-        this.currentChangePage(this.tableDataBegin)
-      } else {
-        this.currentChangePage(this.filterTableDataEnd)
-      }
-    },
-    //组件自带监控当前页码
-    currentChangePage(list) {
-      let from = (this.currentPage - 1) * this.pageSize
-      let to = this.currentPage * this.pageSize
-      this.tableDataEnd = []
-      for (; from < to; from++) {
-        if (list[from]) {
-          this.tableDataEnd.push(list[from])
-        }
-      }
-    },
-    //重置
-    reset() {
-      this.tableDataName = ''
       this.totalItems = this.tableDataBegin.length
-      this.tableDataEnd = []
       if (this.totalItems > this.pageSize) {
         for (let index = 0; index < this.pageSize; index++) {
           this.tableDataEnd.push(this.tableDataBegin[index])
@@ -292,77 +174,198 @@ export default {
       } else {
         this.tableDataEnd = this.tableDataBegin
       }
-      this.flag = false
     },
-    //导出excel表格
-    output() {
-      console.log(this.multipleSelection)
-      var wb = XLSX.utils.table_to_book(document.querySelector('#table'))
-      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-      try {
-        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
-      } catch (e) {
-        if (typeof console !== 'undefined') console.log(e, wbout)
-      }
-      return wbout
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
-    //查看
-    accDetail(row) {
-      this.rowInfo = row
-      this.dialogCheckVisible = true
-    },
-    transDetail(row) {
-      sessionStorage.setItem("detail",JSON.stringify(row.custAcct));
-      console.log('detail',row)
-      this.$router.push({name:'tradeDetail', params:{'row': row}})
-    },
-    accAttrformat(row, column) {
-      switch (row.accAttr) {
-        case '0':
-          return "基本账户";
-          break;
-        case '1':
-          return "一般账户";
-          break;
-        case '2':
-          return "I 类账户";
-          break;
-        default:
-          return "II 类账户";
+    filters: {
+//    dateFormat(row, column) { //格式化时间戳
+//      var date = row[column.property];
+//      if (date == undefined) {
+//        return "";
+//      }
+//      return moment(date).format("YYYY-MM-DD HH:mm:ss");
+//    },
+      accNoFormat(str) { //账号四位空格
+        if (!str) return str
+        let s = ''
+        for (let i = 0, len = str.length; i < len; i++) {
+          if (i !== 0 && i % 4 === 0) {
+            s = s + ' '
+          }
+          s = s + str[i]
+        }
+        return s
       }
     },
-//    amountFormat(s, n) { //格式化金额，隔3位加，
-//      if (!s) return ''
-//      n = n > 0 && n <= 20 ? n : 2
-//      if (s.indexOf('.') === -1) {
-//        s = parseFloat((s + '').replace(/[^\d]/g, '')).toFixed(2) + ''
-//      }
-//      let l = s.split('.')[0].split('').reverse(),
-//        r = s.split('.')[0],
-//        t = ''
-//      for (let i = 0; i < l.length; i++) {
-//        t += l[i] + ((i + 1) % 3 === 0 && (i + 1) != l.length ? ',' : '')
-//      }
-//      t = t.split('').reverse().join('')
-//      return r ? t + '.' + r.substr(0, 2) : t
-//    }
+    methods: {
+      //前端搜索功能需要区分是否检索,因为对应的字段的索引不同
+      //用两个变量接收currentChangePage函数的参数
+      search() {
+        if (this.tableDataName == '') {
+          this.$message.warning('查询条件不能为空！')
+          return
+        }
+        this.tableDataEnd = []
+        //每次手动将数据置空,因为会出现多次点击搜索情况
+        this.filterTableDataEnd = []
+        this.tableDataBegin.forEach((value, index) => {
+          if (value.custAcct) {
+            if (value.custAcct.indexOf(this.tableDataName) >= 0) {
+              this.filterTableDataEnd.push(value)
+            }
+          }
+        })
+        //页面数据改变重新统计数据数量和当前页
+        this.currentPage = 1
+        this.totalItems = this.filterTableDataEnd.length
+        //渲染表格,根据值
+        this.currentChangePage(this.filterTableDataEnd)
+        //页面初始化数据需要判断是否检索过
+        this.flag = true
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val
+        //需要判断是否检索
+        if (!this.flag) {
+          this.currentChangePage(this.tableDataBegin)
+        } else {
+          this.currentChangePage(this.filterTableDataEnd)
+        }
+      },
+      //组件自带监控当前页码
+      currentChangePage(list) {
+        let from = (this.currentPage - 1) * this.pageSize
+        let to = this.currentPage * this.pageSize
+        this.tableDataEnd = []
+        for (; from < to; from++) {
+          if (list[from]) {
+            this.tableDataEnd.push(list[from])
+          }
+        }
+      },
+      //重置
+      reset() {
+        this.tableDataName = ''
+        this.totalItems = this.tableDataBegin.length
+        this.tableDataEnd = []
+        if (this.totalItems > this.pageSize) {
+          for (let index = 0; index < this.pageSize; index++) {
+            this.tableDataEnd.push(this.tableDataBegin[index])
+          }
+        } else {
+          this.tableDataEnd = this.tableDataBegin
+        }
+        this.flag = false
+      },
+      //导出excel表格
+      output() {
+        console.log(this.multipleSelection)
+        var wb = XLSX.utils.table_to_book(document.querySelector('#table'))
+        var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+        try {
+          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
+        } catch (e) {
+          if (typeof console !== 'undefined') console.log(e, wbout)
+        }
+        return wbout
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val
+      },
+      //查看
+      accDetail(row) {
+        this.rowInfo = row
+        this.dialogCheckVisible = true
+      },
+      transDetail(row) {
+        sessionStorage.setItem("detail",JSON.stringify(row.custAcct));
+        console.log('detail',row)
+        this.$router.push({name:'tradeDetail', params:{'row': row}})
+      },
+      currencyTypeFormat(cryTypeCode) {
+        let cryType = "_";
+        switch (cryTypeCode) {
+          case '110':
+            cryType = "港币"
+            break
+          case '116':
+            cryType = "日本元"
+            break
+          case '121':
+            cryType = "澳门元"
+            break
+          case '132':
+            cryType = "新加坡元"
+            break
+          case '136':
+            cryType = "泰国铢"
+            break
+          case '142':
+            cryType = "人民币"
+            break
+          case '143':
+            cryType = "台币"
+            break
+          case '300':
+            cryType = "欧元"
+            break
+          case '303':
+            cryType = "英镑"
+            break
+          case '326':
+            cryType = "挪威克朗"
+            break
+          case '330':
+            cryType = "瑞典克朗"
+            break
+          case '331':
+            cryType = "瑞士法郎"
+            break
+          case '501':
+            cryType = "加拿大元"
+            break
+          case '502':
+            cryType = "美元"
+            break
+        }
+        return cryType
+      },
+      accAttrFormat(row, column) {
+        switch (row.accAttr) {
+          case '001':
+            return "基本账户";
+            break;
+          case '002':
+            return "一般账户";
+            break;
+          case '003':
+            return "临时账户";
+            break;
+          default:
+            return "专用账户";
+        }
+      },
+      accStatusFormat(row, column) {
+        switch (row.accAttr) {
+          case '001':
+            return "在用";
+            break;
+          default:
+            return "销户";
+        }
+      }
+    }
   }
-}
 </script>
 
 <style>
-.accountInfoSearch {
-  padding: 100px;
-}
-.accountInfoSearch header {
-  margin-bottom: 30px;
-  text-align: center;
-  font-size: 26px;
-}
-.cRed {
-  color: red;
-}
+  .accountInfoSearch {
+    padding: 100px;
+  }
+  .accountInfoSearch header {
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 26px;
+  }
+  .cRed {
+    color: red;
+  }
 </style>
