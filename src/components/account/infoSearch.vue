@@ -315,7 +315,9 @@ export default {
       this.dialogCheckVisible = true
     },
     transDetail(row) {
-      this.$router.push({name:'TradeMain', params:{'row': row}})
+      sessionStorage.setItem("detail",JSON.stringify(row.custAcct));
+      console.log('detail',row)
+      this.$router.push({name:'tradeDetail', params:{'row': row}})
     },
     accAttrformat(row, column) {
       switch (row.accAttr) {
