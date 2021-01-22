@@ -50,6 +50,16 @@ export default new Router({
       component: () => import('../components/account/accSheetSearch')
     },
     {
+      path: '/customer',
+      name: 'Customer',
+      component: () => import('../components/customer')
+    },
+    {
+      path: '/customerRecord',
+      name: 'CustomerRecord',
+      component: () => import('../components/customer/record')
+    },
+    {
       path: '/home',
       name: 'Home',
       component: Home,
