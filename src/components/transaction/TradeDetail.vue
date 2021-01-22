@@ -2,40 +2,39 @@
   <div class="tradeDetailBox">
     <span class="go_back" @click="goBack">返回上一页</span>
     <div class="title">交易明细</div>
-    <!--custAcct: "1234567888"-->
-    <!--    <div>-->
-    <!--      <el-form class="el-form" ref="SearchForm" :model="SearchForm" :inline="true" label-width="100px"-->
-    <!--               label-position="left">-->
-    <!--        <el-form-item label="转入/转出" prop="tradeDetailFlag">-->
-    <!--          <el-select v-model="SearchForm.accType" placeholder="全部收支类型" clearable>-->
-    <!--            <el-option label="转出" value="转出"/>-->
-    <!--            <el-option label="转入" value="转入"/>-->
-    <!--          </el-select>-->
-    <!--        </el-form-item>-->
-    <!--        <el-form-item label="交易时间选择" prop="tradeDetailDate">-->
-    <!--          <el-select v-model="SearchForm.tradeDate" placeholder="本月" clearable>-->
-    <!--            <el-option label="本月" value="本月"/>-->
-    <!--            <el-option label="上月" value="上月"/>-->
-    <!--            <el-option label="今年" value="今年"/>-->
-    <!--          </el-select>-->
-    <!--        </el-form-item>-->
-    <!--        <el-form-item inline-message="inline-message">-->
-    <!--          <el-button size="middle" type="primary" icon="el-icon-search" @click="onSearch(form)">搜索</el-button>-->
-    <!--          <el-button size="middle" type="primary" icon="el-icon-delete" @click="onReset">重置</el-button>-->
-    <!--          &lt;!&ndash;  excel导出按钮  &ndash;&gt;-->
-    <!--          <el-button size="middle" type="primary" @click="onExport">导出EXCEL</el-button>-->
-    <!--        </el-form-item>-->
-    <!--      </el-form>-->
-    <!--    </div>-->
+<!--        <div>
+          <el-form class="el-form" ref="SearchForm" :model="SearchForm" :inline="true" label-width="100px"
+                   label-position="left">
+            <el-form-item label="转入/转出" prop="tradeDetailFlag">
+              <el-select v-model="SearchForm.accType" placeholder="全部收支类型" clearable>
+                <el-option label="转出" value="转出"/>
+                <el-option label="转入" value="转入"/>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="交易时间选择" prop="tradeDetailDate">
+              <el-select v-model="SearchForm.tradeDate" placeholder="本月" clearable>
+                <el-option label="本月" value="本月"/>
+                <el-option label="上月" value="上月"/>
+                <el-option label="今年" value="今年"/>
+              </el-select>
+            </el-form-item>
+            <el-form-item inline-message="inline-message">
+              <el-button size="middle" type="primary" icon="el-icon-search" @click="onSearch(form)">搜索</el-button>
+              <el-button size="middle" type="primary" icon="el-icon-delete" @click="onReset">重置</el-button>
+              &lt;!&ndash;  excel导出按钮  &ndash;&gt;
+              <el-button size="middle" type="primary" @click="onExport">导出EXCEL</el-button>
+            </el-form-item>
+          </el-form>
+        </div>-->
     <div class="tradeStatistics">
       <div>
         <span>转入账户：{{accId}}</span>
       </div>
-      <div>
-        <span>当月收入总额 ：<b class="green" v-if="inMoney!==0">{{`+￥${inMoney}`}}</b>
-        <b v-else>0</b>
-        </span>
-      </div>
+<!--      <div>-->
+<!--        <span>当月收入总额 ：<b class="green" v-if="inMoney!==0">{{`+￥${inMoney}`}}</b>-->
+<!--        <b v-else>0</b>-->
+<!--        </span>-->
+<!--      </div>-->
     </div>
     <div class="TradeTable">
       <el-table
@@ -44,22 +43,23 @@
         :default-sort="{prop: 'time',order: 'descending'}"
       >
         <el-table-column label="序号" type="index" width="70px" align="center"/>
-        <el-table-column label="交易流水号" prop="tradeNum" width="260px" align="center"/>
-        <el-table-column label="转入账号" prop="tradeInAccNum" width="200px" align="center"/>
-        <el-table-column label="转出账号" prop="tradeOutAccNum" width="200px" align="center"/>
-        <el-table-column label="交易金额" prop="tradeMoney" width="140px" align="center"/>
-        <el-table-column label="交易状态" prop="tradeStatus" width="100px" align="center"/>
-        <el-table-column label="交易时间" prop="tradeTime" width="160px" align="center" sortable/>
+        <el-table-column label="交易流水号" prop="tradeNum" width="225px" align="center"/>
+        <el-table-column label="转入账号" prop="tradeInAccNum" width="180px" align="center"/>
+        <el-table-column label="转出账号" prop="tradeOutAccNum" width="180px" align="center"/>
+        <el-table-column label="交易金额" prop="tradeMoney" width="130px" align="center"/>
+        <el-table-column label="交易状态" prop="tradeFlag" width="90px" align="center"/>
+        <el-table-column label="转入/转出" prop="tradeStatus" width="90px" align="center"/>
+        <el-table-column label="交易时间" prop="tradeTime" width="150px" align="center" sortable/>
       </el-table>
     </div>
     <div class="tradeStatistics">
       <div>
         <span>转出账户：{{accId}}</span>
       </div>
-      <div>
-        <span>当月支出总额 ：<b class="red" v-if="outMoney!==0">{{`-￥${outMoney}`}}</b>
-        <b v-else>0</b></span>
-      </div>
+<!--      <div>-->
+<!--        <span>当月支出总额 ：<b class="red" v-if="outMoney!==0">{{`-￥${outMoney}`}}</b>-->
+<!--        <b v-else>0</b></span>-->
+<!--      </div>-->
     </div>
     <div class="TradeTable">
       <el-table
@@ -68,12 +68,13 @@
         :default-sort="{prop: 'time',order: 'descending'}"
       >
         <el-table-column label="序号" type="index" width="70px" align="center"/>
-        <el-table-column label="交易流水号" prop="tradeNum" width="260px" align="center"/>
-        <el-table-column label="转入账号" prop="tradeInAccNum" width="200px" align="center"/>
-        <el-table-column label="转出账号" prop="tradeOutAccNum" width="200px" align="center"/>
-        <el-table-column label="交易金额" prop="tradeMoney" width="140px" align="center"/>
-        <el-table-column label="交易状态" prop="tradeStatus" width="100px" align="center"/>
-        <el-table-column label="交易时间" prop="tradeTime" width="160px" align="center" sortable/>
+        <el-table-column label="交易流水号" prop="tradeNum" width="225px" align="center"/>
+        <el-table-column label="转入账号" prop="tradeInAccNum" width="180px" align="center"/>
+        <el-table-column label="转出账号" prop="tradeOutAccNum" width="180px" align="center"/>
+        <el-table-column label="交易金额" prop="tradeMoney" width="130px" align="center"/>
+        <el-table-column label="交易状态" prop="tradeFlag" width="90px" align="center"/>
+        <el-table-column label="转入/转出" prop="tradeStatus" width="90px" align="center"/>
+        <el-table-column label="交易时间" prop="tradeTime" width="150px" align="center" sortable/>
       </el-table>
     </div>
   </div>
@@ -131,12 +132,10 @@
                   tradeTime: respForms[i].tradeTime,
                   tradeStatus: respForms[i].tradeStatus == 0 ? '成功' : '失败',
                 })
-                this.inMoney = this.inMoney+respForms[i].tradeMoney;
               }
               if (transitionForms.length > 0) {
                 this.DetailDataPre = [];
                 this.DetailDataPre = transitionForms;
-                console.log('this.DetailDataPre', this.DetailDataPre);
               }
             } else {
               console.log('----获取数据失败----')
@@ -170,12 +169,10 @@
                   tradeTime: respForms[i].tradeTime,
                   tradeStatus: respForms[i].tradeStatus == 0 ? '成功' : '失败',
                 })
-                this.outMoney = this.outMoney+respForms[i].tradeMoney;
               }
               if (transitionForms.length > 0) {
                 this.DetailDataEnd = [];
                 this.DetailDataEnd = transitionForms;
-                console.log('DetailData', this.DetailDataEnd);
               }
             } else {
               console.log('----获取数据失败----')
