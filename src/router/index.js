@@ -29,6 +29,16 @@ export default new Router({
       component: Register
     },
     {
+      path: '/infoSearch',
+      name: 'InfoSearch',
+      component: () => import('../components/account/infoSearch')
+    },
+    {
+      path: '/accSheetSearch',
+      name: 'accSheetSearch',
+      component: () => import('../components/account/accSheetSearch')
+    }
+    {
       path: '/home',
       name: 'Home',
       component: Home,
