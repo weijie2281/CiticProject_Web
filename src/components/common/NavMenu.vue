@@ -6,7 +6,7 @@
     <span>Online Banking System</span>
 <!--    <i class="el-icon-menu"/>-->
     <i class="el-icon-switch-button" v-on:click="logout"/>
-    <a class="personalCenter" href="#">{{username}}</a>
+    <a class="personalCenter" href="#/profile">{{username}}</a>
   </el-card>
 </template>
 
@@ -22,7 +22,8 @@
         methods: {
             logout () {
                 var _this = this
-                this.axios.get('/crud/logout').then(resp => {
+                // this.axios.get('/crud/logout').then(resp => {
+                this.axios.post('/7979/login/logout').then(resp => {
                     if (resp.data.code === 200) {
                         // 前后端状态保持一致
                         _this.$store.commit('logout')

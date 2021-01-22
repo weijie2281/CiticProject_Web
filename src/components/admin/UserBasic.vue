@@ -154,7 +154,7 @@
           })
           .catch(function (error) { // 请求失败处理
             // that.$message.warning('没有权限')
-            that.$router.replace('/401')
+            // that.$router.replace('/401')
             console.log(error)
           })
       },
