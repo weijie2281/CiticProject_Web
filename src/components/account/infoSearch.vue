@@ -11,9 +11,10 @@
     </div>
     <el-table id="table" :data="tableDataEnd" @selection-change="handleSelectionChange" border stripe fit highlight-current-row style="width: 100%;margin-bottom:20px;">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
-      <el-table-column prop="custAcct" label="客户账号" width="180" align="center" sortable="true">
+      <el-table-column prop="custAcct" label="客户账号" width="180" align="center" sortable>
         <template slot-scope="scope">{{ scope.row.custAcct | accNoFormat}}</template>
       </el-table-column>
+      <el-table-column prop="custName" label="客户名称" align="center"></el-table-column>
       <el-table-column prop="acctType" label="账户类型" align="center">
         <template slot-scope="scope" class="acctType">
           <el-tag v-if="scope.row.acctType == '0'" style="color: red">单位</el-tag>
@@ -21,14 +22,13 @@
           <el-tag v-else style="color: green">企业</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="ccyCode" label="币种" align="center" :formatter="currencyTypeFormat"></el-table-column>
-      <el-table-column prop="accAttr" label="账户性质" align="center" :formatter="accAttrFormat"></el-table-column>
-      <el-table-column prop="accStatus" label="账户状态" align="center" :formatter="accStatusFormat"></el-table-column>
-      <el-table-column prop="accBal" label="余额" align="center" sortable="true">
+      <el-table-column prop="ccyCode" label="币种" align="center"></el-table-column>
+      <el-table-column prop="accAttr" label="账户性质" align="center"></el-table-column>
+      <el-table-column prop="accStatus" label="账户状态" align="center"></el-table-column>
+      <el-table-column prop="accBal" label="余额" align="center" sortable>
+        <template slot-scope="scope">{{scope.row.accBal}}</template>
       </el-table-column>
-      <el-table-column prop="lastUpdate" label="上次更新时间" width="200" align="center" sortable="true">
-        <template slot-scope="scope">{{ scope.row.lastUpdate}}</template>
-      </el-table-column>
+      <el-table-column prop="lastUpdate" label="上次更新时间" width="200" align="center" sortable></el-table-column>
       <el-table-column fixed="right" label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-button @click="accDetail(scope.row)" type="text" size="small">查看账户详情</el-button>
@@ -39,15 +39,18 @@
     <el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="totalItems"></el-pagination>
     <!-- 查看详情 -->
     <el-dialog title="账户基本信息" align="center" :visible.sync="dialogCheckVisible">
-      <el-form :model="rowInfo" label-width="80px">
+      <el-form :model="rowInfo" label-width="100px">
         <el-form-item label="账户ID">
-          <el-input v-model="rowInfo.accID" disabled></el-input>
+          <el-input v-model="rowInfo.acctId" disabled></el-input>
         </el-form-item>
         <el-form-item label="账户类型">
-          <el-input v-model="rowInfo.accType" disabled></el-input>
+          <el-input v-model="rowInfo.acctType == '0'? '单位': rowInfo.acctType == '1'? '个人' : '企业'" disabled></el-input>
         </el-form-item>
         <el-form-item label="客户号">
-          <el-input v-model="rowInfo.custNum" disabled></el-input>
+          <el-input v-model="rowInfo.custAcct" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="客户名称">
+          <el-input v-model="rowInfo.custName" disabled></el-input>
         </el-form-item>
         <el-form-item label="币种">
           <el-input v-model="rowInfo.ccyCode" disabled></el-input>
@@ -82,54 +85,82 @@
       return {
         tableDataBegin: [
           {
-            acctID: '1',
-            custAcct: '1234567888',
+            acctId: '1',
+            custAcct: '123456',
             acctType: '0',
-            ccyCode: '330',
+            ccyCode: '303',
+            accAttr: '001',
+            accBal: '1233445.23',
+            lastUpdate: '1557256891',
+            accStatus: '001',
+            custName: 'multi',
+            unitCode: '711101',
+            opactDate: '1557238891'
+          },
+          {
+            acctId: '2',
+            custAcct: '1234567888',
+            acctType: '1',
+            ccyCode: '326',
             accAttr: '002',
             accBal: '1233445.23',
-            lastUpdate: '1491559642000',
-            accStatus: '001'
+            lastUpdate: '1557238891',
+            accStatus: '002',
+            custName: 'multi',
+            unitCode: '711101',
+            opactDate: '1557238891'
           },
           {
-            acctID: '2',
-            custAcct: '1234567888',
-            acctType: '1',
-            ccyCode: '330',
-            accAttr: '001',
-            accBal: '1233445.23',
-            lastUpdate: '1491559642000',
-            accStatus: '001'
-          },
-          {
-            acctID: '123154567866768787987987878',
+            acctId: '3',
             custAcct: '1234567888',
             acctType: '2',
-            ccyCode: '136',
-            accAttr: '2',
-            accBal: '1233445.23',
-            lastUpdate: '1491559642000',
-            accStatus: '001'
-          },
-          {
-            acctID: '123154567866768787987987878',
-            custAcct: '1234567888',
-            acctType: '0',
-            ccyCode: '110',
+            ccyCode: '300',
             accAttr: '003',
             accBal: '1233445.23',
-            lastUpdate: '1491559642000',
-            accStatus: '002'
+            lastUpdate: '1557238891',
+            accStatus: '003',
+            custName: 'multi',
+            unitCode: '711101',
+            opactDate: '1557238891'
           },
           {
-            acctID: '123154567866768787987987878',
+            acctId: '4',
+            custAcct: '1234567888',
+            acctType: '0',
+            ccyCode: '142',
+            accAttr: '004',
+            accBal: '1233445.23',
+            lastUpdate: '1557568891',
+            accStatus: '004',
+            custName: 'multi',
+            unitCode: '711101',
+            opactDate: '1557238891'
+          },
+          {
+            acctId: '5',
             custAcct: '123154567866768787987987878',
             acctType: '1',
-            ccyCode: '136',
-            accAttr: '001',
+            ccyCode: '143',
+            accAttr: '004',
             accBal: '1233445.23',
-            lastUpdate: '1491559642000',
-            accStatus: '001'
+            lastUpdate: '1557238891',
+            accStatus: '005',
+            custName: 'multi',
+            unitCode: '711101',
+            opactDate: '1557238891'
+          },
+          {
+            acctId: '6',
+            custAcct: '59659',
+            acctType: '1',
+            ccyCode: '143',
+            accAttr: '004',
+            accBal: '1233445.23',
+            lastUpdate: '1557238891',
+            accStatus: '005',
+            custName: 'multi',
+            unitCode: '711101',
+            opactDate: '1557238891'
           }
         ],
         tableDataName: '',
@@ -174,15 +205,19 @@
       } else {
         this.tableDataEnd = this.tableDataBegin
       }
+      this.tableDataBegin.forEach((value, index) => {
+        if (value.custAcct) {
+          value.lastUpdate = this.formatDate(value.lastUpdate) //上次更新时间
+          value.opactDate = this.formatDate(value.opactDate) //开户时间
+          value.accStatus = this.accStatusFormat(value) //账户状态
+          value.accAttr = this.accAttrFormat(value) //账户性质
+          value.ccyCode = this.currencyTypeFormat(value) //币种
+          value.accBal = this.moneyFormat(value.accBal) //余额
+          this.filterTableDataEnd.push(value)
+        }
+      })
     },
     filters: {
-//    dateFormat(row, column) { //格式化时间戳
-//      var date = row[column.property];
-//      if (date == undefined) {
-//        return "";
-//      }
-//      return moment(date).format("YYYY-MM-DD HH:mm:ss");
-//    },
       accNoFormat(str) { //账号四位空格
         if (!str) return str
         let s = ''
@@ -280,9 +315,22 @@
         console.log('detail',row)
         this.$router.push({name:'tradeDetail', params:{'row': row}})
       },
-      currencyTypeFormat(cryTypeCode) {
+      moneyFormat(money) { //金额三位加,
+        if (money && money != null) {
+          money = String(money);
+          var left = money.split('.')[0], right = money.split('.')[1];
+          right = right ? (right.length >= 2 ? '.' + right.substr(0, 2) : '.' + right + '0') : '.00';
+          var temp = left.split('').reverse().join('').match(/(\d{1,3})/g);
+          return (Number(money) < 0 ? '-' : '') + temp.join(',').split('').reverse().join('') + right;
+        } else if (money === 0) { // 注意===在这里的使用，如果传入的money为0,if中会将其判定为boolean类型，故而要另外做===判断
+          return '0.00';
+        } else {
+          return '';
+        }
+      },
+      currencyTypeFormat(row, column) {
         let cryType = "_";
-        switch (cryTypeCode) {
+        switch (row.ccyCode) {
           case '110':
             cryType = "港币"
             break
@@ -344,13 +392,37 @@
         }
       },
       accStatusFormat(row, column) {
-        switch (row.accAttr) {
+        switch (row.accStatus) {
           case '001':
             return "在用";
             break;
-          default:
+          case '002':
             return "销户";
+            break;
+          case '003':
+            return "冻结";
+            break;
+          case '004':
+            return "待激活";
+            break;
+          default:
+            return "睡眠";
         }
+      },
+      formatDate(row, column) {
+        var date = new Date(row * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        let y = date.getFullYear();
+        let MM = date.getMonth() + 1;
+        MM = MM < 10 ? ('0' + MM) : MM;
+        let d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        let h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        let m = date.getMinutes();
+        m = m < 10 ? ('0' + m) : m;
+        let s = date.getSeconds();
+        s = s < 10 ? ('0' + s) : s;
+        return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
       }
     }
   }
