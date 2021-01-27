@@ -51,33 +51,33 @@
         isPreview: false,
         tableDataName: '',
         tableData: {
-          statement: [{
-            acctBalc: 123.000,
-            acctId: '2',
-            acctSqnum: '000001',
-            balanceFlag: 0,
-            balanceId: '1',
-            createTime: 1557238891,
-            custAcct: '222222',
-            totalExpenditure: 100.000,
-            totalRevenue: 20.000,
-            updateTime: 1557238891
-          },
-            {
-              acctBalc: 124.000,
-              acctId: '2',
-              acctSqnum: '000001',
-              balanceFlag: 1,
-              balanceId: '2',
-              createTime: 1557238891,
-              custAcct: '222222',
-              totalExpenditure: 25.000,
-              totalRevenue: 2.000,
-              updateTime: 1557238891
-            }],
-          custNum: '22222',
-          custAcct: '222222',
-          custName: 'test'
+          // statement: [{
+          //   acctBalc: 123.000,
+          //   acctId: '2',
+          //   acctSqnum: '000001',
+          //   balanceFlag: 0,
+          //   balanceId: '1',
+          //   createTime: 1557238891,
+          //   custAcct: '222222',
+          //   totalExpenditure: 100.000,
+          //   totalRevenue: 20.000,
+          //   updateTime: 1557238891
+          // },
+          // {
+          //   acctBalc: 124.000,
+          //   acctId: '2',
+          //   acctSqnum: '000001',
+          //   balanceFlag: 1,
+          //   balanceId: '2',
+          //   createTime: 1557238891,
+          //   custAcct: '222222',
+          //   totalExpenditure: 25.000,
+          //   totalRevenue: 2.000,
+          //   updateTime: 1557238891
+          // }],
+          // custNum: '22222',
+          // custAcct: '222222',
+          // custName: 'test'
         }
       }
     },
@@ -112,25 +112,56 @@
       },
       //查询
       search() {
-        if (this.tableDataName == '') {
-          this.$message.warning('查询条件不能为空！')
-          return
-        } else {
-          //调查询接口TODO
-          if (this.tableData.custAcct === this.tableDataName) {
-            this.tableData.statement.forEach((value, index) => {
-              value.createTime = this.formatDate(value.createTime) //创建时间
-              value.updateTime = this.formatDate(value.updateTime) //创建时间
-              value.acctBalc = this.moneyFormat(value.acctBalc)
-              value.totalExpenditure = this.moneyFormat(value.totalExpenditure)
-              value.totalRevenue = this.moneyFormat(value.totalRevenue)
-            })
-            this.isPreview = true
-          } else {
-            this.$message.warning('没有数据')
+          if (this.tableDataName == '') {
+            this.$message.warning('查询条件不能为空！')
             return
+          } else {
+            //调查询接口TODO
+            this.axios
+              .post('/crud/account/statement',{"custAcct":this.tableDataName})
+              .then(resp => {
+                if (resp && resp.status === 200) {
+                  this.tableData = resp.data.data
+                  if (this.tableData.custAcct === this.tableDataName) {
+                    this.tableData.statement.forEach((value, index) => {
+                      value.createTime = this.formatDate(value.createTime) //创建时间
+                      value.updateTime = this.formatDate(value.updateTime) //创建时间
+                      value.acctBalc = this.moneyFormat(value.acctBalc)
+                      value.totalExpenditure = this.moneyFormat(value.totalExpenditure)
+                      value.totalRevenue = this.moneyFormat(value.totalRevenue)
+                    })
+                    this.isPreview = true
+                  } else {
+                    this.$message.warning('没有数据')
+                    return
+                  }
+                } else {
+                  console.log('----获取数据失败----')
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              });
           }
-        }
+      //   if (this.tableDataName == '') {
+      //     this.$message.warning('查询条件不能为空！')
+      //     return
+      //   } else {
+      //     //调查询接口TODO
+      //     if (this.tableData.custAcct === this.tableDataName) {
+      //       this.tableData.statement.forEach((value, index) => {
+      //         value.createTime = this.formatDate(value.createTime) //创建时间
+      //         value.updateTime = this.formatDate(value.updateTime) //创建时间
+      //         value.acctBalc = this.moneyFormat(value.acctBalc)
+      //         value.totalExpenditure = this.moneyFormat(value.totalExpenditure)
+      //         value.totalRevenue = this.moneyFormat(value.totalRevenue)
+      //       })
+      //       this.isPreview = true
+      //     } else {
+      //       this.$message.warning('没有数据')
+      //       return
+      //     }
+      //   }
       },
       //重置
       reset() {
