@@ -7,13 +7,12 @@
       <el-button type="primary" @click="addRow()" >新增</el-button>
     </div>
     <el-table :data="tableDataEnd" border style="width: 100%;margin-bottom:20px;">
-      <el-table-column prop="num" label="序号" ></el-table-column>
+      <el-table-column prop="num" label="客户号" ></el-table-column>
       <el-table-column prop="name" label="客户名称" ></el-table-column>
       <el-table-column prop="account" label="账号"></el-table-column>
       <el-table-column prop="contact_information" label="联系方式"></el-table-column>
       <el-table-column prop="contact_place" label="联系地址"></el-table-column>
       <el-table-column prop="id_type" label="证件类型"></el-table-column>
-      <el-table-column prop="id_no" label="证件号"></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button @click="checkRow(scope.row)" type="text" size="small">查看</el-button>
@@ -22,6 +21,9 @@
         </template>
       </el-table-column>
     </el-table>
+    <div style="overflow:hidden;">
+        <el-button type="info" @click="output" round style="float:right;">导出</el-button>
+    </div>
     <el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="totalItems"></el-pagination>
     <!-- 查看详情 -->
     <el-dialog title="客户基本信息" align="center" :visible.sync="dialogCheckVisible">
@@ -40,9 +42,6 @@
         </el-form-item>
         <el-form-item label="证件类型">
           <el-input v-model="rowInfo.id_type" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="证件号">
-          <el-input v-model="rowInfo.id_no" disabled></el-input>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -64,9 +63,6 @@
         <el-form-item label="证件类型">
           <el-input v-model="rowInfo.id_type" ></el-input>
         </el-form-item>
-        <el-form-item label="证件号">
-          <el-input v-model="rowInfo.id_no" ></el-input>
-        </el-form-item>
         <div>
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
           <el-button @click="close">关闭</el-button>
@@ -74,7 +70,7 @@
       </el-form>
     </el-dialog>
     <!-- 新增 -->
-    <el-dialog title="客户基本信息" align="center" :visible.sync="dialogEditVisible">
+    <el-dialog title="客户基本信息" align="center" :visible.sync="dialogAddVisible">
       <el-form ref="ruleForm" :model="rowInfo" label-width="80px">
         <el-form-item label="客户名称">
           <el-input v-model="rowInfo.name"></el-input>
@@ -91,11 +87,8 @@
         <el-form-item label="证件类型">
           <el-input v-model="rowInfo.id_type" ></el-input>
         </el-form-item>
-        <el-form-item label="证件号">
-          <el-input v-model="rowInfo.id_no" ></el-input>
-        </el-form-item>
         <div>
-          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button type="primary" @click="close">提交</el-button>
           <el-button @click="close">关闭</el-button>
         </div>
       </el-form>
@@ -103,111 +96,11 @@
   </div>
 </template>
 <script>
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
   data() {
     return {
-      tableDataBegin: [
-        {
-          num: '1',
-          name: '王小虎',
-          account: '234677',
-          contact_information:'18203294078',
-          contact_place:'上海',
-          id_type: '身份证',
-          id_no:'12345678910'
-        },
-        {
-          num: '2',
-          name: '王小虎',
-          account: '12345',
-          contact_information:'15834056780',
-          contact_place:'上海',
-          id_type: '身份证',
-          id_no:'12345678910'
-        },
-        {
-          num: '3',
-          name: '张二虎',
-          account: '345678',
-          contact_information:'12347789043',
-          contact_place:'上海',
-          id_type: '身份证',
-          id_no:'12345678910'
-        },
-        {
-          num: '4',
-          name: '王小刚',
-          account: '123467',
-          contact_information:'18203294078',
-          contact_place:'上海',
-          id_type: '身份证',
-          id_no:'12345678910'
-        },
-        {
-          num: '5',
-          name: '李小红',
-          account: '234579',
-          contact_information:'18203294078',
-          contact_place:'上海',
-          id_type: '身份证',
-          id_no:'12345678910'
-        },
-        {
-          num: '6',
-          name: '王三虎',
-          account: '23468',
-          contact_information:'18203294078',
-          contact_place:'上海',
-          id_type: '身份证',
-          id_no:'12345678910'
-        },
-        {
-          num: '7',
-          name: '武小虎',
-          account: '23455',
-          contact_information:'18203294078',
-          contact_place:'上海',
-          id_type: '身份证',
-          id_no:'12345678910'
-        },
-        {
-          num: '8',
-          name: '王小虎',
-          account: '12345',
-          contact_information:'18203294078',
-          contact_place:'上海',
-          id_type: '身份证',
-          id_no:'12345678910'
-        },
-        {
-          num: '9',
-          name: '王小虎',
-          account: '12345',
-          contact_information:'18203294078',
-          contact_place:'上海',
-          id_type: '身份证',
-          id_no:'12345678910'
-        },
-        {
-          num: '10',
-          name: '王小虎',
-          account: '12345',
-          contact_information:'18203294078',
-          contact_place:'上海',
-          id_type: '身份证',
-          id_no:'12345678910'
-        },
-        {
-          num: '11',
-          name: '王小虎',
-          account: '12345',
-          contact_information:'18203294078',
-          contact_place:'上海',
-          id_type: '身份证',
-          id_no:'12345678910'
-        }
-
-      ],
       tableDataName: '',
       tableDataEnd: [],
       currentPage: 1,
@@ -217,18 +110,58 @@ export default {
       flag: false,
       dialogCheckVisible: false,
       dialogEditVisible: false,
+      dialogAddVisible:false,
       rowInfo: {}
     }
   },
   created() {
-    this.totalItems = this.tableDataBegin.length
-    if (this.totalItems > this.pageSize) {
-      for (let index = 0; index < this.pageSize; index++) {
-        this.tableDataEnd.push(this.tableDataBegin[index])
-      }
-    } else {
-      this.tableDataEnd = this.tableDataBegin
-    }
+    this.axios
+      .post('/crud/customer/query',{customer:{}})
+      .then(resp => {
+       if (resp && resp.status === 200) {
+         //.post('/crud/customer/query',{customer:{}})
+          console.log('----获取数据成功----')
+          this.tableDataBegin = resp.data.data.list
+          console.log(resp.data.data)
+          this.totalItems = this.tableDataBegin.length
+          if (this.totalItems > this.pageSize) {
+           for (let index = 0; index < this.pageSize; index++) {
+              this.tableDataEnd.push(this.tableDataBegin[index])
+            }
+          } else {
+            this.tableDataEnd = this.tableDataBegin
+          }
+          let responseData = resp.data.data.list
+          console.log(responseData)
+          let tableData = []
+          for (var i in responseData) {
+            tableData.push({
+              num: responseData[i].custNo,
+              name: responseData[i].contactName,
+              account: responseData[i].creditCode,
+              contact_information: responseData[i].contactNo,
+              contact_place: responseData[i].address,
+              id_type:responseData[i].idType,
+              })
+              // console.log(responseData[i].roles)
+            }
+            this.tableDataEnd = tableData
+        } else {
+          console.log('----获取数据失败----')
+        }
+      })
+      .catch(function (error) {
+        console.log(error)
+      });
+    //this.totalItems = this.tableDataBegin.length
+    //if (this.totalItems > this.pageSize) {
+    //  for (let index = 0; index < this.pageSize; index++) {
+    //    this.tableDataEnd.push(this.tableDataBegin[index])
+    //  }
+    //} else {
+    //  this.tableDataEnd = this.tableDataBegin
+    //}
+
   },
   methods: {
     //前端搜索功能需要区分是否检索,因为对应的字段的索引不同
@@ -291,9 +224,11 @@ export default {
     submitForm() {
       //将更改的信息rowInfo传给后台触发页面刷新
       this.$router.go(0)
+
     },
     close() {
       this.dialogEditVisible = false
+      this.dialogAddVisible = false
     },
     //删除
     deleteRow(i) {
@@ -307,11 +242,77 @@ export default {
       } else {
         this.tableDataEnd = this.tableDataBegin
       }
+      this.axios
+      .post('/crud/customer/delete',{customer:{custId:this.tableDataEnd[i].num}})
+      .then(resp => {
+       if (resp && resp.status === 200) {
+         console.log('----删除数据成功----')
+       } else {
+          console.log('----获取数据失败----')
+        }
+      })
+      .catch(function (error) {
+        console.log(error)
+      });
+    //删除数据是提示信息
+    this.$confirm('此操作将永久删除该用户信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+    //重新刷新页面
+    this.axios
+      .post('/crud/customer/query',{customer:{}})
+      .then(resp => {
+       if (resp && resp.status === 200) {
+          let responseData = resp.data.data.list
+          console.log(responseData)
+          let tableData = []
+          for (var i in responseData) {
+            tableData.push({
+              num: responseData[i].custNo,
+              name: responseData[i].contactName,
+              account: responseData[i].creditCode,
+              contact_information: responseData[i].contactNo,
+              contact_place: responseData[i].address,
+              id_type:responseData[i].idType,
+              })
+              // console.log(responseData[i].roles)
+            }
+            this.tableDataEnd = tableData
+        } else {
+          console.log('----获取数据失败----')
+        }
+      })
+      .catch(function (error) {
+        console.log(error)
+      });
     },
     //新增
     addRow(){
-      this.dialogEditVisible = true;
-    }
+      this.dialogAddVisible = true;
+    },
+    //数据导出
+    output(){
+        var wb = XLSX.utils.table_to_book(document.querySelector('#table'))
+        var wbout = XLSrite(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+        try {
+          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '对账单.xlsx')
+        } catch (e) {
+          if (typeof console !== 'undefined') console.log(e, wbout)
+        }
+        return wbout
+      }
   }
 }
 </script>
