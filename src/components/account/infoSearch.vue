@@ -12,7 +12,7 @@
     <el-table id="table" :data="tableDataEnd" @selection-change="handleSelectionChange" border stripe fit highlight-current-row style="width: 100%;margin-bottom:20px;">
       <el-table-column type="selection" width="55" align="center"></el-table-column>
       <el-table-column prop="custAcct" label="客户账号" width="180" align="center" sortable>
-        <template slot-scope="scope">{{ scope.row.custAcct | accNoFormat}}</template>
+        <template slot-scope="scope">{{scope.row.custAcct | accNoFormat}}</template>
       </el-table-column>
       <el-table-column prop="custName" label="客户名称" align="center"></el-table-column>
       <el-table-column prop="acctType" label="账户类型" align="center">
@@ -25,7 +25,7 @@
       <el-table-column prop="ccyCode" label="币种" align="center"></el-table-column>
       <el-table-column prop="accAttr" label="账户性质" align="center"></el-table-column>
       <el-table-column prop="accStatus" label="账户状态" align="center"></el-table-column>
-      <el-table-column prop="acctBalc" label="余额" align="center" sortable>
+      <el-table-column prop="acctBalc" label="余额" align="center" width="120px" sortable>
         <template slot-scope="scope">{{scope.row.acctBalc}}</template>
       </el-table-column>
       <el-table-column prop="lastUpdate" label="上次更新时间" width="200" align="center" sortable></el-table-column>
@@ -46,9 +46,12 @@
         <el-form-item label="账户类型">
           <el-input v-model="rowInfo.acctType == '0'? '单位': rowInfo.acctType == '1'? '个人' : '企业'" disabled></el-input>
         </el-form-item>
+        <el-form-item label="客户账号">
+          <el-input v-model="rowInfo.custAcct" disabled></el-input>
+        </el-form-item>
         <el-form-item label="客户号">
-        <el-input v-model="rowInfo.custAcct" disabled></el-input>
-      </el-form-item>
+          <el-input v-model="rowInfo.custNum" disabled></el-input>
+        </el-form-item>
         <el-form-item label="客户名称">
           <el-input v-model="rowInfo.custName" disabled></el-input>
         </el-form-item>
@@ -78,298 +81,378 @@
   </div>
 </template>
 <script>
-import FileSaver from 'file-saver'
-import XLSX from 'xlsx'
-export default {
-  data() {
-    return {
-      tableDataBegin: [],
-      tableDataName: '',
-      tableDataEnd: [],
-      currentPage: 1,
-      pageSize: 5,
-      totalItems: 0,
-      filterTableDataEnd: [],
-      flag: false,
-      dialogCheckVisible: false,
-      dialogEditVisible: false,
-      rowInfo: {},
-      multipleSelection: []
-    }
-  },
-  created() {
-    this.axios
-      .post('/crud/account/accountIndex')
-      .then(resp => {
-        if (resp && resp.status === 200) {
-          this.tableDataBegin = resp.data.data
-          this.totalItems = this.tableDataBegin.length
-          if (this.totalItems > this.pageSize) {
-            for (let index = 0; index < this.pageSize; index++) {
-              this.tableDataEnd.push(this.tableDataBegin[index])
+  import FileSaver from 'file-saver'
+  import XLSX from 'xlsx'
+  export default {
+    data() {
+      return {
+        tableDataBegin: [
+//          {
+//            acctId: '1',
+//            custAcct: '18912356445',
+//            acctType: '0',
+//            ccyCode: '303',
+//            accAttr: '001',
+//            acctBalc: '1233445.23',
+//            lastUpdate: '1557238891',
+//            accStatus: '001',
+//            custName: '小米',
+//            unitCode: '711101',
+//            opactDate: '1557238891',
+//            custNum: '666'
+//          },
+//          {
+//            acctId: '2',
+//            custAcct: '1234567888',
+//            acctType: '1',
+//            ccyCode: '326',
+//            accAttr: '002',
+//            acctBalc: '1233445.23',
+//            lastUpdate: '1611070956',
+//            accStatus: '002',
+//            custName: '小李',
+//            unitCode: '711101',
+//            opactDate: '1611070956',
+//            custNum: '666'
+//          },
+//          {
+//            acctId: '3',
+//            custAcct: '1234567888',
+//            acctType: '2',
+//            ccyCode: '300',
+//            accAttr: '003',
+//            acctBalc: '1233445.23',
+//            lastUpdate: '1557238891',
+//            accStatus: '003',
+//            custName: '小刘',
+//            unitCode: '711101',
+//            opactDate: '1557238891',
+//            custNum: '666'
+//          },
+//          {
+//            acctId: '4',
+//            custAcct: '1344567888',
+//            acctType: '0',
+//            ccyCode: '142',
+//            accAttr: '004',
+//            acctBalc: '1233445.23',
+//            lastUpdate: '1557568891',
+//            accStatus: '004',
+//            custName: '开心',
+//            unitCode: '711101',
+//            opactDate: '1557238891',
+//            custNum: '666'
+//          },
+//          {
+//            acctId: '5',
+//            custAcct: '13154567866768787878',
+//            acctType: '1',
+//            ccyCode: '143',
+//            accAttr: '004',
+//            acctBalc: '1233445.23',
+//            lastUpdate: '1557238891',
+//            accStatus: '005',
+//            custName: 'nike',
+//            unitCode: '711101',
+//            opactDate: '1557238891',
+//            custNum: '666'
+//          },
+//          {
+//            acctId: '6',
+//            custAcct: '59659',
+//            acctType: '1',
+//            ccyCode: '143',
+//            accAttr: '004',
+//            acctBalc: '1233445.23',
+//            lastUpdate: '1557238891',
+//            accStatus: '005',
+//            custName: 'multi',
+//            unitCode: '711101',
+//            opactDate: '1557238891',
+//            custNum: '666'
+//          }
+        ],
+        tableDataName: '',
+        tableDataEnd: [],
+        currentPage: 1,
+        pageSize: 5,
+        totalItems: 0,
+        filterTableDataEnd: [],
+        flag: false,
+        dialogCheckVisible: false,
+        rowInfo: {},
+        multipleSelection: []
+      }
+    },
+    created() {
+      this.axios
+        .post('/crud/account/accountIndex')
+        .then(resp => {
+          if (resp && resp.status === 200) {
+            this.tableDataBegin = resp.data.data
+            this.totalItems = this.tableDataBegin.length //账户总数
+            if (this.totalItems > this.pageSize) { //分页
+              for (let index = 0; index < this.pageSize; index++) {
+                this.tableDataEnd.push(this.tableDataBegin[index])
+              }
+            } else {
+              this.tableDataEnd = this.tableDataBegin
             }
+            this.tableDataBegin.forEach((value, index) => { //格式化
+              if (value.custAcct) {
+                value.lastUpdate = this.formatDate(value.lastUpdate) //上次更新时间
+                value.opactDate = this.formatDate(value.opactDate) //开户时间
+                value.accStatus = this.accStatusFormat(value) //账户状态
+                value.accAttr = this.accAttrFormat(value) //账户性质
+                value.ccyCode = this.currencyTypeFormat(value) //币种
+                value.acctBalc = this.moneyFormat(value.acctBalc) //余额
+              }
+            })
           } else {
-            this.tableDataEnd = this.tableDataBegin
+            console.log('----获取数据失败----')
           }
-          this.tableDataBegin.forEach((value, index) => {
-            if (value.custAcct) {
-              value.lastUpdate = this.formatDate(value.lastUpdate) //上次更新时间
-              value.opactDate = this.formatDate(value.opactDate) //开户时间
-              value.accStatus = this.accStatusFormat(value) //账户状态
-              value.accAttr = this.accAttrFormat(value) //账户性质
-              value.ccyCode = this.currencyTypeFormat(value) //币种
-              value.acctBalc = this.moneyFormat(value.acctBalc) //余额
+        })
+        .catch(function (error) {
+          console.log(error)
+        });
+//      this.totalItems = this.tableDataBegin.length //账户总数
+//      if (this.totalItems > this.pageSize) { //分页
+//        for (let index = 0; index < this.pageSize; index++) {
+//          this.tableDataEnd.push(this.tableDataBegin[index])
+//        }
+//      } else {
+//        this.tableDataEnd = this.tableDataBegin
+//      }
+//      this.tableDataBegin.forEach((value, index) => { //格式化
+//        if (value.custAcct) {
+//          value.lastUpdate = this.formatDate(value.lastUpdate) //上次更新时间
+//          value.opactDate = this.formatDate(value.opactDate) //开户时间
+//          value.accStatus = this.accStatusFormat(value) //账户状态
+//          value.accAttr = this.accAttrFormat(value) //账户性质
+//          value.ccyCode = this.currencyTypeFormat(value) //币种
+//          value.acctBalc = this.moneyFormat(value.acctBalc) //余额
+//        }
+//      })
+    },
+    filters: {
+      accNoFormat(str) { //账号四位空格
+        if (!str) return str
+        let s = ''
+        for (let i = 0, len = str.length; i < len; i++) {
+          if (i !== 0 && i % 4 === 0) {
+            s = s + ' '
+          }
+          s = s + str[i]
+        }
+        return s
+      }
+    },
+    methods: {
+      //前端搜索功能需要区分是否检索,因为对应的字段的索引不同
+      //用两个变量接收currentChangePage函数的参数
+      search() {
+        if (this.tableDataName == '') {
+          this.$message.warning('查询条件不能为空！')
+          return
+        }
+        this.tableDataEnd = []
+        //每次手动将数据置空,因为会出现多次点击搜索情况
+        this.filterTableDataEnd = []
+        this.tableDataBegin.forEach((value, index) => {
+          if (value.custAcct) {
+            if (value.custAcct.indexOf(this.tableDataName) >= 0) {
               this.filterTableDataEnd.push(value)
             }
-          })
+          }
+        })
+        //页面数据改变重新统计数据数量和当前页
+        this.currentPage = 1
+        this.totalItems = this.filterTableDataEnd.length
+        //渲染表格,根据值
+        this.currentChangePage(this.filterTableDataEnd)
+        //页面初始化数据需要判断是否检索过
+        this.flag = true
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val
+        //需要判断是否检索
+        if (!this.flag) {
+          this.currentChangePage(this.tableDataBegin)
         } else {
-          console.log('----获取数据失败----')
+          this.currentChangePage(this.filterTableDataEnd)
         }
-      })
-      .catch(function (error) {
-        console.log(error)
-      });
-//    this.totalItems = this.tableDataBegin.length
-//    if (this.totalItems > this.pageSize) {
-//      for (let index = 0; index < this.pageSize; index++) {
-//        this.tableDataEnd.push(this.tableDataBegin[index])
-//      }
-//    } else {
-//      this.tableDataEnd = this.tableDataBegin
-//    }
-//    this.tableDataBegin.forEach((value, index) => {
-//      if (value.custAcct) {
-//        value.lastUpdate = this.formatDate(value.lastUpdate) //上次更新时间
-//        value.opactDate = this.formatDate(value.opactDate) //开户时间
-//        value.accStatus = this.accStatusFormat(value) //账户状态
-//        value.accAttr = this.accAttrFormat(value) //账户性质
-//        value.ccyCode = this.currencyTypeFormat(value) //币种
-//        value.acctBalc = this.moneyFormat(value.acctBalc) //余额
-//        this.filterTableDataEnd.push(value)
-//      }
-//    })
-  },
-  filters: {
-    accNoFormat(str) { //账号四位空格
-      if (!str) return str
-      let s = ''
-      for (let i = 0, len = str.length; i < len; i++) {
-        if (i !== 0 && i % 4 === 0) {
-          s = s + ' '
-        }
-        s = s + str[i]
-      }
-      return s
-    }
-  },
-  methods: {
-    //前端搜索功能需要区分是否检索,因为对应的字段的索引不同
-    //用两个变量接收currentChangePage函数的参数
-    search() {
-      if (this.tableDataName == '') {
-        this.$message.warning('查询条件不能为空！')
-        return
-      }
-      this.tableDataEnd = []
-      //每次手动将数据置空,因为会出现多次点击搜索情况
-      this.filterTableDataEnd = []
-      this.tableDataBegin.forEach((value, index) => {
-        if (value.custAcct) {
-          if (value.custAcct.indexOf(this.tableDataName) >= 0) {
-            this.filterTableDataEnd.push(value)
+      },
+      //组件自带监控当前页码
+      currentChangePage(list) {
+        let from = (this.currentPage - 1) * this.pageSize
+        let to = this.currentPage * this.pageSize
+        this.tableDataEnd = []
+        for (; from < to; from++) {
+          if (list[from]) {
+            this.tableDataEnd.push(list[from])
           }
         }
-      })
-      //页面数据改变重新统计数据数量和当前页
-      this.currentPage = 1
-      this.totalItems = this.filterTableDataEnd.length
-      //渲染表格,根据值
-      this.currentChangePage(this.filterTableDataEnd)
-      //页面初始化数据需要判断是否检索过
-      this.flag = true
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val
-      //需要判断是否检索
-      if (!this.flag) {
-        this.currentChangePage(this.tableDataBegin)
-      } else {
-        this.currentChangePage(this.filterTableDataEnd)
-      }
-    },
-    //组件自带监控当前页码
-    currentChangePage(list) {
-      let from = (this.currentPage - 1) * this.pageSize
-      let to = this.currentPage * this.pageSize
-      this.tableDataEnd = []
-      for (; from < to; from++) {
-        if (list[from]) {
-          this.tableDataEnd.push(list[from])
+      },
+      //重置
+      reset() {
+        this.tableDataName = ''
+        this.totalItems = this.tableDataBegin.length
+        this.tableDataEnd = []
+        if (this.totalItems > this.pageSize) {
+          for (let index = 0; index < this.pageSize; index++) {
+            this.tableDataEnd.push(this.tableDataBegin[index])
+          }
+        } else {
+          this.tableDataEnd = this.tableDataBegin
         }
-      }
-    },
-    //重置
-    reset() {
-      this.tableDataName = ''
-      this.totalItems = this.tableDataBegin.length
-      this.tableDataEnd = []
-      if (this.totalItems > this.pageSize) {
-        for (let index = 0; index < this.pageSize; index++) {
-          this.tableDataEnd.push(this.tableDataBegin[index])
+        this.flag = false
+      },
+      //导出excel表格
+      output() {
+        console.log(this.multipleSelection)
+        var wb = XLSX.utils.table_to_book(document.querySelector('#table'))
+        var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+        try {
+          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '账户信息.xlsx')
+        } catch (e) {
+          if (typeof console !== 'undefined') console.log(e, wbout)
         }
-      } else {
-        this.tableDataEnd = this.tableDataBegin
+        return wbout
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val
+      },
+      //查看
+      accDetail(row) {
+        this.rowInfo = row
+        this.dialogCheckVisible = true
+      },
+      transDetail(row) {
+        sessionStorage.setItem("detail", JSON.stringify(row.custAcct));
+        console.log('detail', row)
+        this.$router.push({name: 'tradeDetail', params: {'row': row}})
+      },
+      moneyFormat(money) { //金额隔三位加,
+        if (money && money != null) {
+          money = String(money);
+          var left = money.split('.')[0], right = money.split('.')[1];
+          right = right ? (right.length >= 2 ? '.' + right.substr(0, 2) : '.' + right + '0') : '.00';
+          var temp = left.split('').reverse().join('').match(/(\d{1,3})/g);
+          return (Number(money) < 0 ? '-' : '') + temp.join(',').split('').reverse().join('') + right;
+        } else if (money === 0) { // 注意===在这里的使用，如果传入的money为0,if中会将其判定为boolean类型，故而要另外做===判断
+          return '0.00';
+        } else {
+          return '';
+        }
+      },
+      currencyTypeFormat(row, column) { //币种代码格式化
+        let cryType = "_";
+        switch (row.ccyCode) {
+          case '110':
+            cryType = "港币"
+            break
+          case '116':
+            cryType = "日本元"
+            break
+          case '121':
+            cryType = "澳门元"
+            break
+          case '132':
+            cryType = "新加坡元"
+            break
+          case '136':
+            cryType = "泰国铢"
+            break
+          case '142':
+            cryType = "人民币"
+            break
+          case '143':
+            cryType = "台币"
+            break
+          case '300':
+            cryType = "欧元"
+            break
+          case '303':
+            cryType = "英镑"
+            break
+          case '326':
+            cryType = "挪威克朗"
+            break
+          case '330':
+            cryType = "瑞典克朗"
+            break
+          case '331':
+            cryType = "瑞士法郎"
+            break
+          case '501':
+            cryType = "加拿大元"
+            break
+          case '502':
+            cryType = "美元"
+            break
+        }
+        return cryType
+      },
+      accAttrFormat(row, column) { //账户性质格式化
+        switch (row.accAttr) {
+          case '001':
+            return "基本账户";
+            break;
+          case '002':
+            return "一般账户";
+            break;
+          case '003':
+            return "临时账户";
+            break;
+          default:
+            return "专用账户";
+        }
+      },
+      accStatusFormat(row, column) { //账户状态格式化
+        switch (row.accStatus) {
+          case '001':
+            return "在用";
+            break;
+          case '002':
+            return "销户";
+            break;
+          case '003':
+            return "冻结";
+            break;
+          case '004':
+            return "待激活";
+            break;
+          default:
+            return "睡眠";
+        }
+      },
+      formatDate(row, column) { //日期格式化
+        if (row && row != "") {
+          var date = row.length === 10 ? new Date(row * 1000) : new Date(row);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+          var Y = date.getFullYear() + '-';
+          var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+          var D = date.getDate() + ' ';
+          var h = date.getHours() + ':';
+          var m = date.getMinutes() + ':';
+          var s = date.getSeconds();
+          return Y + M + D + h + m + s;
+        }
+        return "-";
       }
-      this.flag = false
-    },
-    //导出excel表格
-    output() {
-      console.log(this.multipleSelection)
-      var wb = XLSX.utils.table_to_book(document.querySelector('#table'))
-      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-      try {
-        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
-      } catch (e) {
-        if (typeof console !== 'undefined') console.log(e, wbout)
-      }
-      return wbout
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
-    //查看
-    accDetail(row) {
-      this.rowInfo = row
-      this.dialogCheckVisible = true
-    },
-    transDetail(row) {
-      sessionStorage.setItem("detail",JSON.stringify(row.custAcct));
-      console.log('detail',row)
-      this.$router.push({name:'tradeDetail', params:{'row': row}})
-    },
-    moneyFormat(money) { //金额三位加,
-      if (money && money != null) {
-        money = String(money);
-        var left = money.split('.')[0], right = money.split('.')[1];
-        right = right ? (right.length >= 2 ? '.' + right.substr(0, 2) : '.' + right + '0') : '.00';
-        var temp = left.split('').reverse().join('').match(/(\d{1,3})/g);
-        return (Number(money) < 0 ? '-' : '') + temp.join(',').split('').reverse().join('') + right;
-      } else if (money === 0) { // 注意===在这里的使用，如果传入的money为0,if中会将其判定为boolean类型，故而要另外做===判断
-        return '0.00';
-      } else {
-        return '';
-      }
-    },
-    currencyTypeFormat(row, column) {
-      let cryType = "_";
-      switch (row.ccyCode) {
-        case '110':
-          cryType = "港币"
-          break
-        case '116':
-          cryType = "日本元"
-          break
-        case '121':
-          cryType = "澳门元"
-          break
-        case '132':
-          cryType = "新加坡元"
-          break
-        case '136':
-          cryType = "泰国铢"
-          break
-        case '142':
-          cryType = "人民币"
-          break
-        case '143':
-          cryType = "台币"
-          break
-        case '300':
-          cryType = "欧元"
-          break
-        case '303':
-          cryType = "英镑"
-          break
-        case '326':
-          cryType = "挪威克朗"
-          break
-        case '330':
-          cryType = "瑞典克朗"
-          break
-        case '331':
-          cryType = "瑞士法郎"
-          break
-        case '501':
-          cryType = "加拿大元"
-          break
-        case '502':
-          cryType = "美元"
-          break
-      }
-      return cryType
-    },
-    accAttrFormat(row, column) {
-      switch (row.accAttr) {
-        case '001':
-          return "基本账户";
-          break;
-        case '002':
-          return "一般账户";
-          break;
-        case '003':
-          return "临时账户";
-          break;
-        default:
-          return "专用账户";
-      }
-    },
-    accStatusFormat(row, column) {
-      switch (row.accStatus) {
-        case '001':
-          return "在用";
-          break;
-        case '002':
-          return "销户";
-          break;
-        case '003':
-          return "冻结";
-          break;
-        case '004':
-          return "待激活";
-          break;
-        default:
-          return "睡眠";
-      }
-    },
-    formatDate(row, column) {
-      var date = new Date(row * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-      let y = date.getFullYear();
-      let MM = date.getMonth() + 1;
-      MM = MM < 10 ? ('0' + MM) : MM;
-      let d = date.getDate();
-      d = d < 10 ? ('0' + d) : d;
-      let h = date.getHours();
-      h = h < 10 ? ('0' + h) : h;
-      let m = date.getMinutes();
-      m = m < 10 ? ('0' + m) : m;
-      let s = date.getSeconds();
-      s = s < 10 ? ('0' + s) : s;
-      return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
     }
   }
-}
 </script>
 
 <style>
-.accountInfoSearch {
-  padding: 100px;
-}
-.accountInfoSearch header {
-  margin-bottom: 30px;
-  text-align: center;
-  font-size: 26px;
-}
-.cRed {
-  color: red;
-}
+  .accountInfoSearch {
+    padding: 100px;
+  }
+  .accountInfoSearch header {
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 26px;
+  }
+  .cRed {
+    color: red;
+  }
 </style>
