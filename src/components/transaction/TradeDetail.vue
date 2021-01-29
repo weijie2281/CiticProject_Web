@@ -2,39 +2,39 @@
   <div class="tradeDetailBox">
     <span class="go_back" @click="goBack">返回上一页</span>
     <div class="title">交易明细</div>
-<!--        <div>
-          <el-form class="el-form" ref="SearchForm" :model="SearchForm" :inline="true" label-width="100px"
-                   label-position="left">
-            <el-form-item label="转入/转出" prop="tradeDetailFlag">
-              <el-select v-model="SearchForm.accType" placeholder="全部收支类型" clearable>
-                <el-option label="转出" value="转出"/>
-                <el-option label="转入" value="转入"/>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="交易时间选择" prop="tradeDetailDate">
-              <el-select v-model="SearchForm.tradeDate" placeholder="本月" clearable>
-                <el-option label="本月" value="本月"/>
-                <el-option label="上月" value="上月"/>
-                <el-option label="今年" value="今年"/>
-              </el-select>
-            </el-form-item>
-            <el-form-item inline-message="inline-message">
-              <el-button size="middle" type="primary" icon="el-icon-search" @click="onSearch(form)">搜索</el-button>
-              <el-button size="middle" type="primary" icon="el-icon-delete" @click="onReset">重置</el-button>
-              &lt;!&ndash;  excel导出按钮  &ndash;&gt;
-              <el-button size="middle" type="primary" @click="onExport">导出EXCEL</el-button>
-            </el-form-item>
-          </el-form>
-        </div>-->
+    <div>
+      <el-form class="el-form" ref="SearchForm" :model="SearchForm" :inline="true" label-width="100px"
+               label-position="left">
+        <!-- <el-form-item label="转入/转出" prop="tradeDetailFlag">
+           <el-select v-model="SearchForm.accType" placeholder="全部收支类型" clearable>
+             <el-option label="转出" value="转出"/>
+             <el-option label="转入" value="转入"/>
+           </el-select>
+         </el-form-item>-->
+        <el-form-item label="交易时间选择" prop="tradeDetailDate">
+          <el-select v-model="SearchForm.tradeDate" placeholder="本月" clearable>
+            <el-option label="本月" value="本月"/>
+            <el-option label="上月" value="上月"/>
+            <el-option label="今年" value="今年"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item inline-message="inline-message">
+          <el-button size="middle" type="primary" icon="el-icon-search" @click="onSearch(form)">搜索</el-button>
+          <!-- <el-button size="middle" type="primary" icon="el-icon-delete" @click="onReset">重置</el-button>
+           &lt;!&ndash;  excel导出按钮  &ndash;&gt;
+           <el-button size="middle" type="primary" @click="onExport">导出EXCEL</el-button>-->
+        </el-form-item>
+      </el-form>
+    </div>
     <div class="tradeStatistics">
       <div>
         <span>转入账户：{{accId}}</span>
       </div>
-<!--      <div>-->
-<!--        <span>当月收入总额 ：<b class="green" v-if="inMoney!==0">{{`+￥${inMoney}`}}</b>-->
-<!--        <b v-else>0</b>-->
-<!--        </span>-->
-<!--      </div>-->
+      <!--      <div>-->
+      <!--        <span>当月收入总额 ：<b class="green" v-if="inMoney!==0">{{`+￥${inMoney}`}}</b>-->
+      <!--        <b v-else>0</b>-->
+      <!--        </span>-->
+      <!--      </div>-->
     </div>
     <div class="TradeTable">
       <el-table
@@ -51,15 +51,26 @@
         <el-table-column label="交易状态" prop="tradeStatus" width="90px" align="center"/>
         <el-table-column label="交易时间" prop="tradeTime" width="150px" align="center" sortable/>
       </el-table>
+      <div class="page">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageObj1.currentPage"
+          :page-sizes="[5, 8, 15, 20]"
+          :page-size="pageObj1.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total=pageObj1.totalCount>
+        </el-pagination>
+      </div>
     </div>
     <div class="tradeStatistics">
       <div>
         <span>转出账户：{{accId}}</span>
       </div>
-<!--      <div>-->
-<!--        <span>当月支出总额 ：<b class="red" v-if="outMoney!==0">{{`-￥${outMoney}`}}</b>-->
-<!--        <b v-else>0</b></span>-->
-<!--      </div>-->
+      <!--      <div>-->
+      <!--        <span>当月支出总额 ：<b class="red" v-if="outMoney!==0">{{`-￥${outMoney}`}}</b>-->
+      <!--        <b v-else>0</b></span>-->
+      <!--      </div>-->
     </div>
     <div class="TradeTable">
       <el-table
@@ -76,6 +87,17 @@
         <el-table-column label="转入/转出" prop="tradeStatus" width="90px" align="center"/>
         <el-table-column label="交易时间" prop="tradeTime" width="150px" align="center" sortable/>
       </el-table>
+      <div class="page">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageObj2.currentPage"
+          :page-sizes="[5, 8, 15, 20]"
+          :page-size="pageObj2.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total=pageObj2.totalCount>
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -85,12 +107,22 @@
     name: "TradeDetail",
     data() {
       return {
+        pageObj1: {
+          pageSize: 5,
+          currentPage: 1,
+          startPage: 1,
+          totalCount: 20,
+        },
+        pageObj2: {
+          pageSize: 5,
+          currentPage: 1,
+          startPage: 1,
+          totalCount: 20,
+        },
         SearchForm: {
           accType: '',
           tradeDate: ''
         },
-        currentPage: 1,
-        pageSize: 10,
         accId: JSON.parse(sessionStorage.getItem('detail')),
         inMoney: 0,
         outMoney: 0,
@@ -107,22 +139,22 @@
         //加载整个页面
         var _this = this;
         var data = {
-          currentPage: this.currentPage,
-          pageSize: this.pageSize,
+          startPage: this.pageObj1.currentPage,
+          mutiNum: this.pageObj1.pageSize,
           tradeInAccNum: JSON.parse(sessionStorage.getItem('detail')),
         };
-        console.log('11111111111', data.tradeInAccNum);
+        console.log('页码', data)
         this.axios
           .post('/7979/trade/query', data)
           .then(resp => {
             if (resp && resp.status === 200) {
-              console.log('查询详情', resp.data.data)
               // _this.transitionForms = resp.data
               const transitionForms = [];
               const respForms = resp.data.data.tradeDetailParamList;
               const pagination = resp.data.data.pagination;
-              this.pageSize = pagination.pageSize;
-              this.currentPage = pagination.current;
+              this.pageObj1.pageSize = pagination.pageSize;
+              this.pageObj1.currentPage = pagination.current;
+              this.pageObj1.totalCount = pagination.total;
               for (var i in respForms) {
                 transitionForms.push({
                   tradeNum: respForms[i].tradeNum,
@@ -131,7 +163,7 @@
                   tradeMoney: respForms[i].tradeMoney,
                   tradeTime: respForms[i].tradeTime,
                   tradeStatus: respForms[i].tradeStatus == 0 ? '成功' : '失败',
-                  tradeFlag: respForms[i].tradeFlag==1?'转出':'转入',
+                  tradeFlag: respForms[i].tradeFlag == 1 ? '转出' : '转入',
                 })
               }
               if (transitionForms.length > 0) {
@@ -146,21 +178,21 @@
             console.log(error)
           });
         var dataOut = {
-          currentPage: this.currentPage,
-          pageSize: this.pageSize,
+          startPage: this.pageObj2.currentPage,
+          mutiNum: this.pageObj2.pageSize,
           tradeOutAccNum: JSON.parse(sessionStorage.getItem('detail')),
         };
         this.axios
           .post('/7979/trade/query', dataOut)
           .then(resp => {
             if (resp && resp.status === 200) {
-              console.log('查询详情', resp.data.data)
               // _this.transitionForms = resp.data
               const transitionForms = [];
               const respForms = resp.data.data.tradeDetailParamList;
               const pagination = resp.data.data.pagination;
-              this.pageSize = pagination.pageSize;
-              this.currentPage = pagination.current;
+              this.pageObj2.pageSize = pagination.pageSize;
+              this.pageObj2.currentPage = pagination.current;
+              this.pageObj2.totalCount = pagination.total;
               for (var i in respForms) {
                 transitionForms.push({
                   tradeNum: respForms[i].tradeNum,
@@ -169,7 +201,7 @@
                   tradeMoney: respForms[i].tradeMoney,
                   tradeTime: respForms[i].tradeTime,
                   tradeStatus: respForms[i].tradeStatus == 0 ? '成功' : '失败',
-                  tradeFlag: respForms[i].tradeFlag==1?'转出':'转入',
+                  tradeFlag: respForms[i].tradeFlag == 1 ? '转出' : '转入',
                 })
               }
               if (transitionForms.length > 0) {
@@ -187,8 +219,27 @@
       goBack() {
         this.$router.back();
       },
-      handleCurrentChange: function (currentPage) {
-        this.currentPage = currentPage
+      // 每页显示数据量变更
+      handleSizeChange: function (val) {
+        this.pageObj1.pageSize = val;
+        this.pageObj1.currentPage = 1;
+        this.getDetailData();
+      },
+      // 页码变更
+      handleCurrentChange: function (val) {
+        this.pageObj1.currentPage = val
+        this.getDetailData();
+      },
+      // 每页显示数据量变更
+      handleSizeChangeObj2: function (val) {
+        this.pageObj2.pageSize = val;
+        this.pageObj2.currentPage = 1;
+        this.getDetailData();
+      },
+      // 页码变更
+      handleCurrentChangeObj2: function (val) {
+        this.pageObj2.currentPage = val
+        this.getDetailData();
       },
     }
   }
@@ -209,7 +260,12 @@
   }
 
   .el-form {
-    text-align: center;
+    text-align: right;
+    margin-right: 20px;
+  }
+
+  .TradeTable {
+    margin: 20px;
   }
 
   .abbreviation {
