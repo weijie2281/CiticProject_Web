@@ -42,7 +42,7 @@
               v-model="form.startTradeTime"
               format="yyyy-MM-dd HH:mm:ss"
               value-format="yyyy-MM-dd  HH:mm:ss"
-              :picker-options="pickerOptionsEnd"
+              :picker-options="pickerOptionsStart"
               style="width: 200px"/>
           </el-form-item>
         </el-col>
