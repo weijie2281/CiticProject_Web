@@ -60,7 +60,7 @@
         // 当前页码
         currentPage: 1,
         // 查询的页码
-        start: 1,
+        startPage: 1,
         // 默认数据总数
         totalCount: 20,
         // 查询后返回的数据，后续替换为tradeData
@@ -78,7 +78,7 @@
         var _this = this;
         var data = {
           startPage: this.currentPage,
-          pageSize: this.pageSize,
+          mutiNum: this.pageSize,
         };
         this.axios
           .post('/7979/trade/query', data)
@@ -141,8 +141,8 @@
           return false;
         }
         var data = {
-          startPage: this.start,
-          pageSize: this.pageSize,
+          startPage: this.currentPage,
+          mutiNum: this.pageSize,
           //交易流水号
           tradeNum: form.tradeNum,
           // 转入账号
@@ -225,7 +225,7 @@
         }
         var data = {
           startPage: this.currentPage,
-          pageSize: this.pageSize,
+          mutiNum: this.pageSize,
           //交易流水号
           tradeNum: form.tradeNum,
           // 转入账号
@@ -266,14 +266,17 @@
         this.pageSize = val;
         this.currentPage = 1;
         // this.getTableData(this.currentPage, this.pageSize)
-        this.getTradeData()
+        // this.getTradeData()
+        this.searchResult();
+
       },
 
       // 页码变更
       handleCurrentChange: function (val) {
         this.currentPage = val
         // this.getTableData(this.currentPage, this.pageSize)
-        this.getTradeData()
+        // this.getTradeData()
+        this.searchResult()
       },
       dateFormat(date, format) {
         //  处理时间格式的函数
