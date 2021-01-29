@@ -121,17 +121,24 @@
         var _this = this;
         var form = this.$refs.searchBar.form;
         // 对金额范围进行限制
+        if (form.startMoney && !form.endMoney){
+          this.$message.error(`请输入最大金额范围`);
+          return false;
+        }
+        if(form.endMoney && !form.startMoney){
+          this.$message.error(`请输入最小金额范围`);
+          return false;
+        }
         if (form.startMoney && form.endMoney) {
           if (form.endMoney - form.startMoney < 0) {
             this.$message.error(`输入最大金额需大于最小金额`);
             return false;
-          } else if (!form.endMoney) {
-            this.$message.error(`请输入最大金额范围`);
-            return false;
-          } else if (!form.startMoney) {
-            this.$message.error(`请输入最小金额范围`);
-            return false;
           }
+        }
+        // 对时间范围进行限制
+        if(form.endTradeTime && !form.startTradeTime){
+          this.$message.error(`请输入开始日期`);
+          return false;
         }
         var data = {
           startPage: this.start,
@@ -146,8 +153,8 @@
           startTradeTime: form.startTradeTime,
           endTradeTime: form.endTradeTime ? form.endTradeTime : this.dateFormat(Date.now(), 'yyyy-MM-DD h:m:s'),
           // 金额范围
-          startTradeMoney: form.startMoney ? form.startMoney : this.minMoney,
-          endTradeMoney: form.endMoney ? form.endMoney : this.maxMoney,
+          startTradeMoney: form.startMoney,
+          endTradeMoney: form.endMoney,
         };
         console.log('data',data)
         this.axios
@@ -197,19 +204,25 @@
         //  导出Excel
         var _this = this;
         var form = this.$refs.searchBar.form;
-        if(form.endMoney&&form.endMoney>_this.maxMoney){
-          this.$message.error(`输入金额超出最大额度`);
+        // 对金额范围进行限制
+        if (form.startMoney && !form.endMoney){
+          this.$message.error(`请输入最大金额范围`);
           return false;
         }
-        if(form.startMoney&&form.startMoney>_this.maxMoney){
-          this.$message.error(`输入金额超出最大额度`);
+        if(form.endMoney && !form.startMoney){
+          this.$message.error(`请输入最小金额范围`);
           return false;
         }
-        if(form.startMoney &&  form.endMoney){
-          if(form.startMoney>form.endMoney){
-            this.$message.error(`输入最大金额应大于最小金额`);
+        if (form.startMoney && form.endMoney) {
+          if (form.endMoney - form.startMoney < 0) {
+            this.$message.error(`输入最大金额需大于最小金额`);
             return false;
           }
+        }
+        // 对时间范围进行限制
+        if(form.endTradeTime && !form.startTradeTime){
+          this.$message.error(`请输入开始日期`);
+          return false;
         }
         var data = {
           startPage: this.currentPage,
@@ -224,8 +237,8 @@
           startTradeTime: form.startTradeTime,
           endTradeTime: form.endTradeTime ? form.endTradeTime : this.dateFormat(Date.now(), 'yyyy-MM-DD'),
           // 金额范围
-          startMoney: form.startMoney ? form.startMoney : this.minMoney,
-          endMoney: form.endMoney ? form.endMoney : this.maxMoney,
+          startMoney: form.startMoney,
+          endMoney: form.endMoney,
         };
         this.axios
           .post('/7979/excel/tradeExport', data,{responseType: 'blob'})

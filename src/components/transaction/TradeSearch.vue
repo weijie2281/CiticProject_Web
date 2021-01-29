@@ -63,14 +63,14 @@
         <el-col :span="10">
           <el-form-item label="金额范围" prop="startMoney">
             <el-input v-model="form.startMoney"
-                      placeholder="0.00"
+                      placeholder="0.000"
                       clearable
                       style="width: 200px"/>
           </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item label="至" prop="endMoney" label-width="25px">
-            <el-input v-model="form.endMoney" placeholder="0.00" clearable style="width: 200px"/>
+            <el-input v-model="form.endMoney" placeholder="0.000" clearable style="width: 200px"/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -90,16 +90,22 @@
     name: "TradeSearch",
     data() {
       var validateAcc = (rule, value, callback) => {
-        if (/[^\d]/g.test(value)) {
-          this.$refs['form'].resetFields();
-          return callback(new Error('只能输入数字'))
+        if(value){
+          if (/[^\d]/g.test(value)) {
+            this.$refs['form'].resetFields();
+            return callback(new Error('只能输入数字'))
+          }
         }
+
       };
       var validateMoney = (rule, value, callback) => {
-        if (!(/^\d+(\.(\d{0,2}))?$/g.test(value))) {
-          this.$refs['form'].resetFields();
-          return callback(new Error('只能输入整数和两位小数'))
+        if(value){
+          if (!(/^\d+(\.(\d{0,3}))?$/g.test(value))) {
+            this.$refs['form'].resetFields();
+            return callback(new Error('只能输入整数和两位小数'))
+          }
         }
+
       };
       return {
         // 查询字段：交易流水号，转入账号，转出账号，交易时间，交易金额
