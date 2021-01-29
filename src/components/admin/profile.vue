@@ -6,7 +6,7 @@
     <div class="profile-container">
       <el-form v-model="form" style="text-align: left" ref="dataForm">
         <el-form-item label="员工编号" :label-width="formLabelWidth" prop="id">
-          <el-input v-model="form.id" autocomplete="off" :disabled="!editFlag"></el-input>
+          <el-input v-model="form.id" autocomplete="off" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">
           <el-input v-model="form.username" autocomplete="off" :disabled="!editFlag"></el-input>
@@ -14,9 +14,9 @@
         <el-form-item label="真实姓名" :label-width="formLabelWidth" prop="name">
           <el-input v-model="form.name" autocomplete="off" :disabled="!editFlag"></el-input>
         </el-form-item>
-        <el-form-item label="账户" :label-width="formLabelWidth" prop="custAcct">
-          <el-input v-model="form.custAcct" autocomplete="off" :disabled="!editFlag"></el-input>
-        </el-form-item>
+<!--        <el-form-item label="账户" :label-width="formLabelWidth" prop="custAcct">-->
+<!--          <el-input v-model="form.custAcct" autocomplete="off" :disabled="!editFlag"></el-input>-->
+<!--        </el-form-item>-->
         <el-form-item label="电话" :label-width="formLabelWidth" prop="phone">
           <el-input v-model="form.phone" autocomplete="off" :disabled="!editFlag"></el-input>
         </el-form-item>
@@ -26,43 +26,26 @@
         <el-form-item label="地址" :label-width="formLabelWidth" prop="address">
           <el-input v-model="form.address" autocomplete="off" :disabled="!editFlag"></el-input>
         </el-form-item>
-<!--        <el-form-item label="角色分配" label-width="120px" prop="roles">-->
-<!--          <el-checkbox-group v-model="form.selectedRolesIds">-->
-<!--            <el-checkbox v-for="(role,i) in roles" :key="i" :label="role.id">{{role.nameZh}}</el-checkbox>-->
-<!--          </el-checkbox-group>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item prop="id" style="height: 0">-->
-<!--          <el-input type="hidden" v-model="form.id" autocomplete="off"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item prop="enabled" style="height: 0">-->
-<!--          <el-input type="hidden" v-model="form.enabled" autocomplete="off"></el-input>-->
-<!--        </el-form-item>-->
         <el-form-item style="float: right">
           <el-button type="primary" @click="editProfile" v-if="!editFlag">修改个人信息</el-button>
           <el-button type="warning" @click="saveProfile" v-if="editFlag">保存</el-button>
           <el-button type="primary" @click="editPassword">修改密码</el-button>
         </el-form-item>
       </el-form>
-<!--      <div slot="footer" class="dialog-footer">-->
-<!--        <el-button @click="dialogFormVisible = false">取 消</el-button>-->
-<!--        <el-button type="primary" @click="onSubmit">确 定</el-button>-->
-<!--      </div>-->
+
       <el-dialog
         title="修改密码"
         :visible.sync="dialogFormVisible"
         @close="clear">
-        <el-form v-model="form" style="text-align: left" ref="dataForm">
-<!--          <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">-->
-<!--            <el-input v-model="form.username" autocomplete="off" :disabled="true"></el-input>-->
-<!--          </el-form-item>-->
+        <el-form :model="form" style="text-align: left" ref="dataForm" :rules="rules">
           <el-form-item label="旧密码" :label-width="formLabelWidth" prop="password">
-            <el-input v-model="form.password" autocomplete="off"></el-input>
+            <el-input type="password" v-model="form.password" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="新密码" :label-width="formLabelWidth" prop="newPassword">
-            <el-input v-model="form.newPassword" autocomplete="off"></el-input>
+            <el-input type="password" v-model="form.newPassword" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="确认新密码" :label-width="formLabelWidth" prop="confirmPassword">
-            <el-input v-model="form.confirmPassword" autocomplete="off"></el-input>
+            <el-input type="password" v-model="form.confirmPassword" autocomplete="off"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -80,6 +63,16 @@
         name: 'profile',
         components:{RoleEdit},
         data () {
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'))
+                    // password 是表单上绑定的字段
+                } else if (value !== this.form.newPassword) {
+                    callback(new Error('两次输入密码不一致!'))
+                } else {
+                    callback()
+                }
+            }
             return {
                 tableData: [],
                 dialogFormVisible: false,
@@ -99,7 +92,18 @@
                     confirmPassword: '',
                 },
                 formLabelWidth: '120px',
-                editFlag: false
+                editFlag: false,
+                rules: {
+                    password: [
+                        { required: true, message: '请输入旧密码', trigger: 'blur' },
+                    ],
+                    newPassword: [
+                        { required: true, message: '请输入新密码', trigger: 'blur' },
+                    ],
+                    confirmPassword: [
+                        { required: true, validator: validatePass2, trigger: 'blur' }
+                    ]
+                }
             }
         },
         created () {
@@ -130,11 +134,12 @@
             savePassword () {
                 var _this = this
                 this.axios
-                    .post('/7979/user/setting?password=' + this.form.password + '&newPassword=' + this.form.newPassword + '&confirmPassword=' + this.form.confirmPassword)
+                    .post('/7979/user/setting?password=' + this.form.password + '&newPassword=' + this.form.newPassword + '&confirmPassword=' + this.form.confirmPassword
+                    + '&userName=' + this.$store.state.user.username)
                     .then(response => {
                         if (response.data.code === 200) {
                             _this.dialogFormVisible = false;
-                            _this.$message.warning("更新成功")
+                            _this.$message.success("更新成功")
                         }
                         else {
                             _this.$message.warning(response.data.msg)
@@ -162,7 +167,7 @@
                     .then(response => {
                         if (response.data.code === 200) {
                             _this.editFlag = false;
-                            _this.$message.warning("更新成功")
+                            _this.$message.success("更新成功")
                         }
                         else {
                             _this.$message.warning(response.data.msg)
@@ -176,31 +181,11 @@
             editPassword () {
                 this.dialogFormVisible = true;
             },
-            editRole (item) {
-                this.$refs.roleEdit.dialogFormVisible = true
-                // console.log(item.username)
-                let permissionIds = []
-                for (let i = 0; i < item.permissions.length; i++){
-                    permissionIds.push(item.permissions[i].id)
-                }
-                let menuIds = []
-                for (let i = 0; i < item.menus.length; i++) {
-                    menuIds.push(item.menus[i].id)
-                    for (let j = 0; j < item.menus[i].children.length; j++) {
-                        menuIds.push(item.menus[i].children[j].id)
-                    }
-                }
-                // console.log(item.roles)
-                this.$refs.roleEdit.form = {
-                    id: item.id,
-                    name: item.name,
-                    nameZh: item.nameZh,
-                    selectedPermissionsIds: permissionIds,
-                    selectedMenusIds: menuIds,
-                }
-                // if (this.$refs.roleEdit.$refs.tree) {
-                //   this.$refs.roleEdit.$refs.tree.setCheckedKeys(menuIds)
-                // }
+
+            clear () {
+                this.form.password = '',
+                this.form.confirmPassword = '',
+                this.form.newPassword = ''
             },
         }
     }

@@ -21,14 +21,37 @@
         },
         methods: {
             logout () {
-                var _this = this
-                // this.axios.get('/crud/logout').then(resp => {
-                this.axios.post('/7979/login/logout').then(resp => {
-                    if (resp.data.code === 200) {
-                        // 前后端状态保持一致
-                        _this.$store.commit('logout')
-                        _this.$router.replace('/login')
-                    }
+                // this.axios.post('/7979/login/logout').then(resp => {
+                //     if (resp.data.code === 200) {
+                //         // 前后端状态保持一致
+                //         _this.$store.commit('logout')
+                //         _this.$router.replace('/login')
+                //     }
+                // })
+                var that = this
+                that.$alert('确定退出吗？', '退出', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    that.axios
+                        .post('/7979/login/logout').then(resp => {
+                        if (resp && resp.data.code === 200) {
+                            that.$store.commit('logout')
+                            that.$router.replace('/login')
+                        } else {
+                            that.$message.warning(resp.data.msg)
+                        }
+                    })
+                        .catch(function (error) { // 请求失败处理
+                            console.log(error)
+                            that.$message.warning('失败')
+                        })
+                }).catch(() => {
+                    that.$message({
+                        type: 'info',
+                        message: '已取消'
+                    })
                 })
             }
         }

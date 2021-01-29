@@ -38,8 +38,8 @@
         adminMenus: [
             {"id":1,"path":"/admin","name":null,"nameZh":"用户管理","iconCls":"el-icon-user","component":"Home","parentId":0,
                 "children":[
-                    {"id":23,"path":"/profile","name":null,"nameZh":"用户信息","iconCls":null,"component":"admin/profile","parentId":1,"children":null},
-                    // {"id":4,"path":"/admin/user/basic","name":null,"nameZh":"用户信息","iconCls":null,"component":"admin/UserBasic","parentId":1,"children":null},
+                    // {"id":23,"path":"/profile","name":null,"nameZh":"用户信息","iconCls":null,"component":"admin/profile","parentId":1,"children":null},
+                    {"id":4,"path":"/admin/user/basic","name":null,"nameZh":"用户管理","iconCls":null,"component":"admin/UserBasic","parentId":1,"children":null},
                     // {"id":5,"path":"/admin/user/role","name":null,"nameZh":"角色配置","iconCls":null,"component":"admin/UserRole","parentId":1,"children":null}
                     ]},
             // {"id":3,"path":"/admin","name":null,"nameZh":"系统配置","iconCls":"el-icon-s-tools","component":"Home","parentId":0,

@@ -10,9 +10,9 @@ import page401 from '../components/401page'
 import profile from "../components/admin/profile";
 
 import UserBasic from "../components/admin/UserBasic";
-import UserRole from "../components/admin/UserRole";
-import MenuManagement from "../components/admin/MenuManagement";
-import PermissionManagement from "../components/admin/PermissionManagement";
+// import UserRole from "../components/admin/UserRole";
+// import MenuManagement from "../components/admin/MenuManagement";
+// import PermissionManagement from "../components/admin/PermissionManagement";
 import TradeMain from "../components/transaction/TradeMain";
 import AccountManage from "../components/admin/AccountManage";
 import TradeDetail from "../components/transaction/TradeDetail";
@@ -75,22 +75,22 @@ export default new Router({
             requireAuth: true
           }
         },
-        {
-          path: '/admin/user/role',
-          name: 'UserRole',
-          component: UserRole,
-          meta: {
-            requireAuth: true
-          }
-        },
-        {
-          path: '/admin/menu/manage',
-          name: 'MenuManagement',
-          component: MenuManagement,
-          meta: {
-            requireAuth: true
-          }
-        },
+        // {
+        //   path: '/admin/user/role',
+        //   name: 'UserRole',
+        //   component: UserRole,
+        //   meta: {
+        //     requireAuth: true
+        //   }
+        // },
+        // {
+        //   path: '/admin/menu/manage',
+        //   name: 'MenuManagement',
+        //   component: MenuManagement,
+        //   meta: {
+        //     requireAuth: true
+        //   }
+        // },
         {
           path: '/admin/account/manage',
           name: 'AccountManage',

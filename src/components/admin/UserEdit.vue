@@ -6,9 +6,11 @@
       :visible.sync="dialogFormVisible"
       @close="clear">
       <el-form v-model="form" style="text-align: left" ref="dataForm">
+        <el-form-item label="员工编号" :label-width="formLabelWidth" prop="userId">
+          <el-input v-model="form.userId" autocomplete="off"></el-input>
+        </el-form-item>
         <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">
-          <el-input v-model="form.username" autocomplete="off" :disabled="true"></el-input>
-<!--          <span v-model="form.username"></span>-->
+          <el-input v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="真实姓名" :label-width="formLabelWidth" prop="name">
           <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -19,14 +21,30 @@
         <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
           <el-input v-model="form.email" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="角色分配" label-width="120px" prop="roles">
-          <el-checkbox-group v-model="form.selectedRolesIds">
-            <el-checkbox v-for="(role,i) in roles" :key="i" :label="role.id">{{role.nameZh}}</el-checkbox>
-          </el-checkbox-group>
+        <el-form-item label="地址" :label-width="formLabelWidth" prop="address">
+          <el-input v-model="form.address" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item prop="id" style="height: 0">
-          <el-input type="hidden" v-model="form.id" autocomplete="off"></el-input>
+        <el-form-item label="客户账号" :label-width="formLabelWidth" prop="custAcct">
+          <el-input v-model="form.custAcct" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="用户类型" :label-width="formLabelWidth" prop="type">
+          <el-select v-model="form.type" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+<!--        <el-form-item label="角色分配" label-width="120px" prop="roles">-->
+<!--          <el-checkbox-group v-model="form.selectedRolesIds">-->
+<!--            <el-checkbox v-for="(role,i) in roles" :key="i" :label="role.id">{{role.nameZh}}</el-checkbox>-->
+<!--          </el-checkbox-group>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item prop="id" style="height: 0">-->
+<!--          <el-input type="hidden" v-model="form.id" autocomplete="off"></el-input>-->
+<!--        </el-form-item>-->
         <el-form-item prop="enabled" style="height: 0">
           <el-input type="hidden" v-model="form.enabled" autocomplete="off"></el-input>
         </el-form-item>
@@ -46,75 +64,134 @@
     data () {
       return {
         dialogFormVisible: false,
-        roles: '',
         form: {
-          id: '',
+          userId: '',
           username: '',
           name: '',
           phone: '',
           email: '',
           enabled: '',
-          selectedRolesIds: '',
+          address: '',
+          custAcct: '',
+          type: '',
         },
-        formLabelWidth: '120px'
+        addFlag: true,
+        formLabelWidth: '120px',
+        options: [{
+            value: 0,
+            label: '普通用户'
+        }, {
+            value: 1,
+            label: '管理员'
+        }],
       }
     },
     created () {
-      this.getRolesData()
     },
     methods: {
       clear () {
         this.form = {
-          id: '',
+          userId: '',
           username: '',
           name: '',
           phone: '',
           email: '',
           enabled: '',
-          selectedRolesIds: '',
+          address: '',
+          custAcct: '',
+          type: '',
         }
-      },
-      getRolesData () {
-        this.axios
-          .get('/crud/admin/role')
-          .then(resp => {
-          if (resp && resp.status === 200) {
-            this.roles = resp.data
-          }
-        })
-          .catch(function (error) { // 请求失败处理
-            console.log(error)
-          })
       },
       onSubmit () {
         var that = this
-        let roles = []
-        for (let i = 0; i < this.form.selectedRolesIds.length; i++) {
-          for (let j = 0; j < this.roles.length; j++) {
-            if (this.form.selectedRolesIds[i] === this.roles[j].id) {
-              roles.push(this.roles[j])
-            }
-          }
+
+        if (this.addFlag == true) {
+            this.axios
+                .post('/7979/login/register', {
+                    userId: this.form.userId,
+                    userName: this.form.username,
+                    password: "123",
+                    realName: this.form.name,
+                    email: this.form.email,
+                    teleNum: this.form.phone,
+                    userType: this.form.type,
+                    // userStatus: this.form.enabled,
+                    address: this.form.address,
+                    custAcct: this.form.custAcct
+                })
+                .then(resp => {
+                    if (resp.data.code === 200) {
+                        this.$emit('onSubmit')
+                        this.dialogFormVisible = false
+                        this.$alert('添加用户成功', '提示', {
+                            confirmButtonText: '确定'
+                        })
+                    } else {
+                        this.$alert('添加用户失败', '提示', {
+                            confirmButtonText: '确定'
+                        })
+                    }
+                    // this.dialogFormVisible = false
+                })
+                .catch(function (error) { // 请求失败处理
+                    console.log(error)
+                })
+
+        } else {
+            this.axios
+                .post('/7979/user/update', {
+                    userId: this.form.userId,
+                    userName: this.form.username,
+                    realName: this.form.name,
+                    email: this.form.email,
+                    teleNum: this.form.phone,
+                    userType: this.form.type,
+                    // userStatus: this.form.enabled,
+                    address: this.form.address,
+                    custAcct: this.form.custAcct
+                })
+                .then(response => {
+                    if (response.data.code === 200) {
+                        this.$emit('onSubmit')
+                        this.dialogFormVisible = false
+                        this.$message.success("更新成功")
+                    }
+                    else {
+                        this.$message.warning(response.data.msg)
+                    }
+                })
+                .catch(function (error) { // 请求失败处理
+                    console.log(error)
+                })
         }
-        this.axios
-          .post('/crud/updateUser', {
-            id: this.form.id,
-            username: this.form.username,
-            name: this.form.name,
-            phone: this.form.phone,
-            email: this.form.email,
-            enabled: this.form.enabled,
-            roles: roles
-          }).then(resp => {
-          if (resp && resp.status === 200) {
-            this.dialogFormVisible = false
-            this.$emit('onSubmit')
-          }
-        })
-          .catch(function (error) { // 请求失败处理
-            console.log(error)
-            that.$message.warning('失败')
-          })
+
+        // this.axios
+        //     .post('/7979/login/register', {
+        //         userId: this.form.userId,
+        //         userName: this.form.username,
+        //         password: "123",
+        //         realName: this.form.name,
+        //         email: this.form.email,
+        //         teleNum: this.form.phone,
+        //         // userStatus: this.form.enabled,
+        //         address: this.form.address,
+        //         custAcct: this.form.custAcct
+        //     })
+        //     .then(resp => {
+        //         if (resp.data.code === 200) {
+        //             this.$alert('添加用户成功', '提示', {
+        //                 confirmButtonText: '确定'
+        //             })
+        //         } else {
+        //             this.$alert(resp.data.msg, '提示', {
+        //                 confirmButtonText: '确定'
+        //             })
+        //         }
+        //         this.dialogFormVisible = false
+        //     })
+        //     .catch(function (error) { // 请求失败处理
+        //         console.log(error)
+        //     })
       }
     }
   }

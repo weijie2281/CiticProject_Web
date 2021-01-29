@@ -7,14 +7,14 @@
     </el-breadcrumb>
     <div class="filter-container">
       <el-input v-model="listQuery.username" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.status" placeholder="状态" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
-      </el-select>
-<!--      <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">-->
-<!--        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />-->
+<!--      <el-select v-model="listQuery.status" placeholder="状态" clearable style="width: 90px" class="filter-item">-->
+<!--        <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />-->
 <!--      </el-select>-->
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
+      </el-button>
+      <el-button class="filter-item" type="warning" icon="el-icon-refresh" @click="handleReset">
+        重置
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
@@ -64,6 +64,21 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="type"
+        label="用户类型"
+        fit>
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="地址"
+        fit>
+      </el-table-column>
+      <el-table-column
+        prop="createTime"
+        label="创建时间"
+        fit>
+      </el-table-column>
+      <el-table-column
         label="操作"
         width="120">
         <template slot-scope="scope">
@@ -74,7 +89,7 @@
           </el-button>
           <el-button
             type="text"
-            size="small">
+            size="small" @click="deleteUser(scope.row)">
             移除
           </el-button>
         </template>
@@ -125,6 +140,7 @@
           type: undefined,
           sort: '+id'
         },
+        // addFlag: true
       }
     },
     created () {
@@ -134,56 +150,119 @@
       getTableData () {
         var that = this
         this.axios
-          .get('/crud/admin/user')
+          .get('/7979/user/getAllUsers', {
+              params: {
+                  pageNum: this.currentPage,
+                  pageSize: this.pagesize
+              }
+          })
           .then(response => {
-            let responseData = response.data
+            let responseData = response.data.data.UserList
             let tableData = []
             for (var i in responseData) {
               tableData.push({
-                id: responseData[i].id,
-                username: responseData[i].username,
-                name: responseData[i].name,
-                phone: responseData[i].phone,
+                id: responseData[i].userId,
+                username: responseData[i].userName,
+                name: responseData[i].realName,
+                phone: responseData[i].teleNum,
                 email: responseData[i].email,
-                enabled: responseData[i].enabled,
-                roles: responseData[i].roles,
+                enabled: responseData[i].userStatus,
+                type: responseData[i].userType,
+                address: responseData[i].address,
+                createTime: responseData[i].createTime,
               })
-              // console.log(responseData[i].roles)
             }
             this.users = tableData
+            this.totalCount = response.data.data.pagination.total
           })
           .catch(function (error) { // 请求失败处理
-            // that.$message.warning('没有权限')
-            // that.$router.replace('/401')
             console.log(error)
           })
       },
       editUser (item) {
         this.$refs.userEdit.dialogFormVisible = true
-        // console.log(item.username)
-        let roleIds = []
-        for (let i = 0; i < item.roles.length; i++){
-          roleIds.push(item.roles[i].id)
-        }
-        console.log(item.roles)
+        this.$refs.userEdit.addFlag = false
+
         this.$refs.userEdit.form = {
-          id: item.id,
+          userId: item.id,
           username: item.username,
           name: item.name,
           phone: item.phone,
           email: item.email,
           enabled: item.enabled,
-          selectedRolesIds: roleIds,
+          address: item.address,
+          type: item.type,
+          // custAcct: item.custAcct,
         }
       },
       handleCreate() {
         // this.resetTemp()
         // this.dialogStatus = 'create'
+        this.$refs.userEdit.addFlag = true
         this.$refs.userEdit.dialogFormVisible = true
       },
       handleFilter() {
-          // this.listQuery.page = 1
-          // this.getList()
+          var that = this
+          this.axios
+              .get('/7979/user/findAllUserByUsername', {
+                  params: {
+                      keyword: this.listQuery.username,
+                      pageNum: this.currentPage,
+                      pageSize: this.pagesize
+                  }
+              })
+              .then(response => {
+                  let responseData = response.data.data.UserList
+                  let tableData = []
+                  for (var i in responseData) {
+                      tableData.push({
+                          id: responseData[i].userId,
+                          username: responseData[i].userName,
+                          name: responseData[i].realName,
+                          phone: responseData[i].teleNum,
+                          email: responseData[i].email,
+                          enabled: responseData[i].userStatus,
+                          type: responseData[i].userType,
+                          address: responseData[i].address,
+                          createTime: responseData[i].createTime,
+                      })
+                  }
+                  this.users = tableData
+                  this.totalCount = response.data.data.pagination.total
+              })
+              .catch(function (error) { // 请求失败处理
+                  console.log(error)
+              })
+      },
+      handleReset() {
+        this.listQuery.username = ''
+      },
+      deleteUser (item) {
+          var that = this
+          that.$alert('确定删除用户吗？', '删除', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+          }).then(() => {
+              that.axios
+                  .post('/7979/user/deleteUser?userId=' + item.id).then(resp => {
+                  if (resp && resp.data.code === 200) {
+                      that.getTableData()
+                      that.$message.success("删除成功")
+                  } else {
+                      that.$message.success("删除失败")
+                  }
+              })
+                  .catch(function (error) { // 请求失败处理
+                      console.log(error)
+                      that.$message.warning('失败')
+                  })
+          }).catch(() => {
+              that.$message({
+                  type: 'info',
+                  message: '已取消'
+              })
+          })
       },
       // 每页显示数据量变更
       handleSizeChange: function (val) {

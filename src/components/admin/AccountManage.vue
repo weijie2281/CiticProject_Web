@@ -85,6 +85,7 @@
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.acctStatus=='冻结'"
+            style="color: forestgreen"
             type="text"
             size="small" @click="activeAccount(scope.row)">
             启用
