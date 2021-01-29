@@ -18,12 +18,14 @@
 
 <style scoped>
   .app-main {
-    /* 50= navbar  50  */
-    /*min-height: calc(100vh - 50px);*/
+     /*50= navbar  50*/
+    min-height: calc(100vh - 50px);
     /*height: 100%;*/
+    /*min-height: 100vh;*/
     width: 100%;
     position: relative;
     overflow: hidden;
+    background-color: white;
   }
 
   .fixed-header+.app-main {
