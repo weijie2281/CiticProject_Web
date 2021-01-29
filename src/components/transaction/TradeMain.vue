@@ -12,7 +12,7 @@
       <el-table
         :data="tradeData"
         border
-        :default-sort="{prop: 'time',order: 'descending'}"
+        :default-sort="{prop: 'tradeTime',order: 'descending'}"
       >
         <el-table-column label="序号" type="index" width="70px" align="center"/>
         <el-table-column label="交易流水号" prop="tradeNum" width="225px" align="center"/>
