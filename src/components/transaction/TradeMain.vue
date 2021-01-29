@@ -55,8 +55,6 @@
     components: {TradeSearch},
     data() {
       return {
-        // 金额范围
-        minMoney: 0.00,
         // 默认每页数据量
         pageSize: 10,
         // 当前页码
@@ -83,7 +81,7 @@
           pageSize: this.pageSize,
         };
         this.axios
-          .post('/crud/trade/query', data)
+          .post('/7979/trade/query', data)
           .then(resp => {
             if (resp && resp.status === 200) {
               console.log('全查询',resp.data.data)
@@ -123,17 +121,15 @@
         var _this = this;
         var form = this.$refs.searchBar.form;
         // 对金额范围进行限制
-        if(form.endMoney&&form.endMoney>_this.maxMoney){
-          this.$message.error(`输入金额超出最大额度`);
-          return false;
-        }
-        if(form.startMoney&&form.startMoney>_this.maxMoney){
-          this.$message.error(`输入金额超出最大额度`);
-          return false;
-        }
-        if(form.startMoney &&  form.endMoney){
-          if(form.startMoney>form.endMoney){
-            this.$message.error(`输入最大金额应大于最小金额`);
+        if (form.startMoney && form.endMoney) {
+          if (form.endMoney - form.startMoney < 0) {
+            this.$message.error(`输入最大金额需大于最小金额`);
+            return false;
+          } else if (!form.endMoney) {
+            this.$message.error(`请输入最大金额范围`);
+            return false;
+          } else if (!form.startMoney) {
+            this.$message.error(`请输入最小金额范围`);
             return false;
           }
         }
@@ -155,7 +151,7 @@
         };
         console.log('data',data)
         this.axios
-          .post('/crud/trade/query', data)
+          .post('/7979/trade/query', data)
           .then(resp => {
             if (resp && resp.status === 200) {
               console.log('resp.data',resp.data.data.tradeDetailParamList);
@@ -179,6 +175,8 @@
               if (transitionForms.length>0){
                 this.tradeData=[];
                 this.tradeData=transitionForms;
+              }else{
+                this.tradeData=[];
               }
               console.log('this.tradeData',this.tradeData)
             } else {
@@ -230,7 +228,7 @@
           endMoney: form.endMoney ? form.endMoney : this.maxMoney,
         };
         this.axios
-          .post('/crud/excel/tradeExport', data,{responseType: 'blob'})
+          .post('/7979/excel/tradeExport', data,{responseType: 'blob'})
           .then(resp => {
             if (resp && resp.status === 200) {
               console.log('resp.data',resp.data);
