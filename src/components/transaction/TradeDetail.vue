@@ -40,15 +40,15 @@
       <el-table
         :data="DetailDataPre"
         border
-        :default-sort="{prop: 'time',order: 'descending'}"
+        :default-sort="{prop: 'tradeTime',order: 'descending'}"
       >
         <el-table-column label="序号" type="index" width="70px" align="center"/>
         <el-table-column label="交易流水号" prop="tradeNum" width="225px" align="center"/>
         <el-table-column label="转入账号" prop="tradeInAccNum" width="180px" align="center"/>
         <el-table-column label="转出账号" prop="tradeOutAccNum" width="180px" align="center"/>
         <el-table-column label="交易金额" prop="tradeMoney" width="130px" align="center"/>
-        <el-table-column label="交易状态" prop="tradeFlag" width="90px" align="center"/>
-        <el-table-column label="转入/转出" prop="tradeStatus" width="90px" align="center"/>
+        <el-table-column label="转入/转出" prop="tradeFlag" width="90px" align="center"/>
+        <el-table-column label="交易状态" prop="tradeStatus" width="90px" align="center"/>
         <el-table-column label="交易时间" prop="tradeTime" width="150px" align="center" sortable/>
       </el-table>
     </div>
@@ -65,7 +65,7 @@
       <el-table
         :data="DetailDataEnd"
         border
-        :default-sort="{prop: 'time',order: 'descending'}"
+        :default-sort="{prop: 'tradeTime',order: 'descending'}"
       >
         <el-table-column label="序号" type="index" width="70px" align="center"/>
         <el-table-column label="交易流水号" prop="tradeNum" width="225px" align="center"/>
@@ -113,7 +113,7 @@
         };
         console.log('11111111111', data.tradeInAccNum);
         this.axios
-          .post('/crud/trade/query', data)
+          .post('/7979/trade/query', data)
           .then(resp => {
             if (resp && resp.status === 200) {
               console.log('查询详情', resp.data.data)
@@ -151,7 +151,7 @@
           tradeOutAccNum: JSON.parse(sessionStorage.getItem('detail')),
         };
         this.axios
-          .post('/crud/trade/query', dataOut)
+          .post('/7979/trade/query', dataOut)
           .then(resp => {
             if (resp && resp.status === 200) {
               console.log('查询详情', resp.data.data)

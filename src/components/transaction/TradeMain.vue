@@ -28,8 +28,8 @@
             </el-tooltip>
           </template>
         </el-table-column>-->
-        <el-table-column label="交易状态" prop="tradeFlag" width="90px" align="center"/>
-        <el-table-column label="转入/转出" prop="tradeStatus" width="90px" align="center"/>
+        <el-table-column label="转入/转出" prop="tradeFlag" width="90px" align="center"/>
+        <el-table-column label="交易状态" prop="tradeStatus" width="90px" align="center"/>
         <el-table-column label="交易时间" prop="tradeTime" width="150px" align="center" sortable/>
       </el-table>
       <div class="page">
