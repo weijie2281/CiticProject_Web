@@ -156,7 +156,6 @@
           startTradeMoney: form.startMoney,
           endTradeMoney: form.endMoney,
         };
-        console.log('data',data)
         this.axios
           .post('/7979/trade/query', data)
           .then(resp => {
@@ -237,8 +236,8 @@
           startTradeTime: form.startTradeTime,
           endTradeTime: form.endTradeTime ? form.endTradeTime : this.dateFormat(Date.now(), 'yyyy-MM-DD'),
           // 金额范围
-          startMoney: form.startMoney,
-          endMoney: form.endMoney,
+          startTradeMoney: form.startMoney,
+          endTradeMoney: form.endMoney,
         };
         this.axios
           .post('/7979/excel/tradeExport', data,{responseType: 'blob'})
