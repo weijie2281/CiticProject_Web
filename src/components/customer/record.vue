@@ -4,16 +4,20 @@
     <div style="margin-bottom:20px;float:right;">
       <el-input v-model="tableDataName" placeholder="请输入客户名称" style="width:300px"></el-input>
       <el-button type="primary" @click="doFilter">搜索</el-button>
+      <el-button type="primary" @click="return_page">重置</el-button>
       <el-button type="primary" @click="addRow()" >新增</el-button>
     </div>
-    <el-table :data="tableDataEnd" border style="width: 100%;margin-bottom:20px;">
-      <el-table-column prop="num" label="客户号" ></el-table-column>
-      <el-table-column prop="name" label="客户名称" ></el-table-column>
-      <el-table-column prop="account" label="账号"></el-table-column>
-      <el-table-column prop="contact_information" label="联系方式"></el-table-column>
-      <el-table-column prop="contact_place" label="联系地址"></el-table-column>
-      <el-table-column prop="id_type" label="证件类型"></el-table-column>
-      <el-table-column fixed="right" label="操作" width="200">
+    <el-table id="table" :data="tableDataEnd" border style="width: 100%;margin-bottom:20px;">
+      <el-table-column prop="custId" label="序号" width="50"></el-table-column>
+      <el-table-column prop="custNo" label="客户号" width="70"></el-table-column>
+      <el-table-column prop="custName" label="客户姓名" ></el-table-column>
+      <el-table-column prop="creditCode" label="身份证号"></el-table-column>
+      <el-table-column prop="contactName" label="联系人"></el-table-column>
+      <el-table-column prop="contactNo" label="联系电话"></el-table-column>
+      <el-table-column prop="address" label="地址"></el-table-column>
+      <el-table-column prop="idType" label="身份类型"></el-table-column>
+      <el-table-column prop="idNo" label="idNo"></el-table-column>
+      <el-table-column fixed="right" label="操作" width="150">
         <template slot-scope="scope">
           <el-button @click="checkRow(scope.row)" type="text" size="small">查看</el-button>
           <el-button type="text" @click="editRow(scope.row)" size="small">编辑</el-button>
@@ -26,69 +30,105 @@
     </div>
     <el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="totalItems"></el-pagination>
     <!-- 查看详情 -->
-    <el-dialog title="客户基本信息" align="center" :visible.sync="dialogCheckVisible">
+    <el-dialog title="客户基本信息详情" align="center" :visible.sync="dialogCheckVisible">
       <el-form :model="rowInfo" label-width="80px">
-        <el-form-item label="客户名称">
-          <el-input v-model="rowInfo.name" disabled></el-input>
+        <el-form-item label="序号">
+          <el-input v-model="rowInfo.custId" disabled></el-input>
         </el-form-item>
-        <el-form-item label="账号">
-          <el-input v-model="rowInfo.account" disabled></el-input>
+        <el-form-item label="客户号">
+          <el-input v-model="rowInfo.custNo" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="客户姓名">
+          <el-input v-model="rowInfo.custName" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号">
+          <el-input v-model="rowInfo.creditCode" disabled></el-input>
         </el-form-item>
         <el-form-item label="联系人">
-          <el-input v-model="rowInfo.contact_information" disabled></el-input>
+          <el-input v-model="rowInfo.contactName" disabled></el-input>
         </el-form-item>
-        <el-form-item label="联系地址">
-          <el-input v-model="rowInfo.contact_place" disabled></el-input>
+        <el-form-item label="联系电话">
+          <el-input v-model="rowInfo.contactNo" disabled></el-input>
         </el-form-item>
-        <el-form-item label="证件类型">
-          <el-input v-model="rowInfo.id_type" disabled></el-input>
+        <el-form-item label="地址">
+          <el-input v-model="rowInfo.address" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="身份类型">
+          <el-input v-model="rowInfo.idTpye" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="idNo">
+          <el-input v-model="rowInfo.idNo" disabled></el-input>
         </el-form-item>
       </el-form>
     </el-dialog>
     <!-- 修改 -->
-    <el-dialog title="客户基本信息" align="center" :visible.sync="dialogEditVisible">
+    <el-dialog title="修改客户基本信息" align="center" :visible.sync="dialogEditVisible">
       <el-form ref="ruleForm" :model="rowInfo" label-width="80px">
-        <el-form-item label="客户名称">
-          <el-input v-model="rowInfo.name"></el-input>
+        <el-form-item label="序号">
+          <el-input v-model="rowInfo.custId" disabled></el-input>
         </el-form-item>
-        <el-form-item label="账号">
-          <el-input v-model="rowInfo.account"></el-input>
+        <el-form-item label="客户号">
+          <el-input v-model="rowInfo.custNo" ></el-input>
+        </el-form-item>
+        <el-form-item label="客户姓名">
+          <el-input v-model="rowInfo.custName" ></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号">
+          <el-input v-model="rowInfo.creditCode" ></el-input>
         </el-form-item>
         <el-form-item label="联系人">
-          <el-input v-model="rowInfo.contact_information"></el-input>
+          <el-input v-model="rowInfo.contactName" ></el-input>
         </el-form-item>
-        <el-form-item label="联系地址">
-          <el-input v-model="rowInfo.contact_place"></el-input>
+        <el-form-item label="联系电话">
+          <el-input v-model="rowInfo.contactNo" ></el-input>
         </el-form-item>
-        <el-form-item label="证件类型">
-          <el-input v-model="rowInfo.id_type" ></el-input>
+        <el-form-item label="地址">
+          <el-input v-model="rowInfo.address" ></el-input>
+        </el-form-item>
+        <el-form-item label="身份类型">
+          <el-input v-model="rowInfo.idTpye" ></el-input>
+        </el-form-item>
+        <el-form-item label="idNo">
+          <el-input v-model="rowInfo.idNo" ></el-input>
         </el-form-item>
         <div>
-          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button type="primary" @click="submitForm_edit('ruleForm')">提交</el-button>
           <el-button @click="close">关闭</el-button>
         </div>
       </el-form>
     </el-dialog>
     <!-- 新增 -->
-    <el-dialog title="客户基本信息" align="center" :visible.sync="dialogAddVisible">
-      <el-form ref="ruleForm" :model="rowInfo" label-width="80px">
-        <el-form-item label="客户名称">
-          <el-input v-model="rowInfo.name"></el-input>
+    <el-dialog title="新增客户基本信息" align="center" :visible.sync="dialogAddVisible">
+      <el-form ref="ruleForm1" :model="ruleForm1" label-width="80px">
+        <!-- <el-form-item label="序号">
+          <el-input v-model="rowInfo.custId" ></el-input>
+        </el-form-item> -->
+        <el-form-item label="客户号">
+          <el-input v-model="ruleForm1.custNo" ></el-input>
         </el-form-item>
-        <el-form-item label="账号">
-          <el-input v-model="rowInfo.account"></el-input>
+        <el-form-item label="客户姓名">
+          <el-input v-model="ruleForm1.custName" ></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号">
+          <el-input v-model="ruleForm1.creditCode" ></el-input>
         </el-form-item>
         <el-form-item label="联系人">
-          <el-input v-model="rowInfo.contact_information"></el-input>
+          <el-input v-model="ruleForm1.contactName" ></el-input>
         </el-form-item>
-        <el-form-item label="联系地址">
-          <el-input v-model="rowInfo.contact_place"></el-input>
+        <el-form-item label="联系电话">
+          <el-input v-model="ruleForm1.contactNo" ></el-input>
         </el-form-item>
-        <el-form-item label="证件类型">
-          <el-input v-model="rowInfo.id_type" ></el-input>
+        <el-form-item label="地址">
+          <el-input v-model="ruleForm1.address" ></el-input>
+        </el-form-item>
+        <el-form-item label="身份类型">
+          <el-input v-model="ruleForm1.idTpye" ></el-input>
+        </el-form-item>
+        <el-form-item label="idNo">
+          <el-input v-model="ruleForm1.idNo" ></el-input>
         </el-form-item>
         <div>
-          <el-button type="primary" @click="close">提交</el-button>
+          <el-button type="primary" @click="submitForm_add('ruleForm1')">提交</el-button>
           <el-button @click="close">关闭</el-button>
         </div>
       </el-form>
@@ -101,6 +141,17 @@ import XLSX from 'xlsx'
 export default {
   data() {
     return {
+      ruleForm1:{
+        //custId: this.rowInfo.custId,
+        custNo: '',
+        custName: '',
+        creditCode: '',
+        contactName: '',
+        contactNo: '',
+        address: '',
+        idType: '',
+        idNo:'',
+      },
       tableDataName: '',
       tableDataEnd: [],
       currentPage: 1,
@@ -115,53 +166,7 @@ export default {
     }
   },
   created() {
-    this.axios
-      .post('/crud/customer/query',{customer:{}})
-      .then(resp => {
-       if (resp && resp.status === 200) {
-         //.post('/crud/customer/query',{customer:{}})
-          console.log('----获取数据成功----')
-          this.tableDataBegin = resp.data.data.list
-          console.log(resp.data.data)
-          this.totalItems = this.tableDataBegin.length
-          if (this.totalItems > this.pageSize) {
-           for (let index = 0; index < this.pageSize; index++) {
-              this.tableDataEnd.push(this.tableDataBegin[index])
-            }
-          } else {
-            this.tableDataEnd = this.tableDataBegin
-          }
-          let responseData = resp.data.data.list
-          console.log(responseData)
-          let tableData = []
-          for (var i in responseData) {
-            tableData.push({
-              num: responseData[i].custNo,
-              name: responseData[i].contactName,
-              account: responseData[i].creditCode,
-              contact_information: responseData[i].contactNo,
-              contact_place: responseData[i].address,
-              id_type:responseData[i].idType,
-              })
-              // console.log(responseData[i].roles)
-            }
-            this.tableDataEnd = tableData
-        } else {
-          console.log('----获取数据失败----')
-        }
-      })
-      .catch(function (error) {
-        console.log(error)
-      });
-    //this.totalItems = this.tableDataBegin.length
-    //if (this.totalItems > this.pageSize) {
-    //  for (let index = 0; index < this.pageSize; index++) {
-    //    this.tableDataEnd.push(this.tableDataBegin[index])
-    //  }
-    //} else {
-    //  this.tableDataEnd = this.tableDataBegin
-    //}
-
+    this.getpage()
   },
   methods: {
     //前端搜索功能需要区分是否检索,因为对应的字段的索引不同
@@ -171,12 +176,43 @@ export default {
         this.$message.warning('查询条件不能为空！')
         return
       }
+      // alert(this.tableDataName.custName)
+      // this.axios
+      // .post('/crud/customer/query',{customer:{custName:this.tableDataName.custName}})
+      // .then(resp => {
+      //  if (resp && resp.status === 200) {
+      //    //.post('/crud/customer/query',{customer:{}})
+      //     console.log('----查询数据成功----')
+         
+      //     let responseData = resp.data.data.list
+      //     // console.log(responseData)
+      //     let tableData = []
+      //     for (var i in responseData) {
+      //       tableData.push({
+      //         //custId: responseData[i].custId,
+      //         //custName: responseData[i].custName,
+      //         //creditCode: responseData[i].creditCode,
+      //         //contactName: responseData[i].contactName,
+      //         //address: responseData[i].address,
+      //         //idNo:responseData[i].idNo,
+      //         })
+      //         // console.log(responseData[i].roles)
+      //       }
+      //     this.tableDataEnd = tableData
+      //     //获取数据后填充页面
+      //   } else {
+      //     console.log('----获取数据失败----')
+      //   }
+      // })
+      // .catch(function (error) {
+      //   console.log(error)
+      // });
       this.tableDataEnd = []
       //每次手动将数据置空,因为会出现多次点击搜索情况
       this.filterTableDataEnd = []
       this.tableDataBegin.forEach((value, index) => {
-        if (value.name) {
-          if (value.name.indexOf(this.tableDataName) >= 0) {
+        if (value.custName) {
+          if (value.custName.indexOf(this.tableDataName) >= 0) {
             this.filterTableDataEnd.push(value)
           }
         }
@@ -221,10 +257,63 @@ export default {
       this.dialogEditVisible = true
     },
     //表单提交
-    submitForm() {
+    submitForm_add() {
+      //alert(this.rowInfo.custId)
+      //alert(this.rowInfo.idNo)
       //将更改的信息rowInfo传给后台触发页面刷新
       this.$router.go(0)
-
+      this.axios
+          .post('/7979/customer/add', {
+            //custId: this.rowInfo.custId,
+            custNo: this.ruleForm1.custNo,
+            custName: this.ruleForm1.custName,
+            creditCode: this.ruleForm1.creditCode,
+            contactName: this.ruleForm1.contactName,
+            contactNo: this.ruleForm1.contactNo,
+            address: this.ruleForm1.address,
+            idType: this.ruleForm1.idType,
+            idNo:this.ruleForm1.idNo,
+          }).then(resp => {
+          //  alert("hhhh")
+          if (resp && resp.status === 200) {
+            console.log('----新增数据成功----')
+            this.dialogAddVisible = false
+            this.$emit('onSubmit')
+          }
+        })
+          .catch(function (error) { // 请求失败处理
+            console.log(error)
+            that.$message.warning('失败')
+          })
+    },
+    //表单编辑
+    submitForm_edit() {
+      //alert(this.rowInfo.custId)
+      //alert(this.rowInfo.idNo)
+      //将更改的信息rowInfo传给后台触发页面刷新
+      this.$router.go(0)
+      this.axios
+          .post('/7979/customer/edit', {
+            custId: this.rowInfo.custId,
+            custNo: this.rowInfo.custNo,
+            custName: this.rowInfo.custName,
+            creditCode: this.rowInfo.creditCode,
+            contactName: this.rowInfo.contactName,
+            contactNo: this.rowInfo.contactNo,
+            address: this.rowInfo.address,
+            idType: this.rowInfo.idType,
+            idNo:this.rowInfo.idNo,
+          }).then(resp => {
+          if (resp && resp.status === 200) {
+            console.log('----新增数据成功----')
+            this.dialogAddVisible = false
+            this.$emit('onSubmit')
+          }
+        })
+          .catch(function (error) { // 请求失败处理
+            console.log(error)
+            that.$message.warning('失败')
+          })
     },
     close() {
       this.dialogEditVisible = false
@@ -232,20 +321,35 @@ export default {
     },
     //删除
     deleteRow(i) {
-      this.tableDataBegin.splice(i, 1)
-      this.totalItems = this.tableDataBegin.length
-      this.tableDataEnd = []
-      if (this.totalItems > this.pageSize) {
-        for (let index = 0; index < this.pageSize; index++) {
-          this.tableDataEnd.push(this.tableDataBegin[index])
-        }
-      } else {
-        this.tableDataEnd = this.tableDataBegin
-      }
+      //this.tableDataBegin.splice(i, 1)
+      //this.totalItems = this.tableDataBegin.length
+      //this.tableDataEnd = []
+      //if (this.totalItems > this.pageSize) {
+      //  for (let index = 0; index < this.pageSize; index++) {
+      //    this.tableDataEnd.push(this.tableDataBegin[index])
+      //  }
+      //} else {
+      //  this.tableDataEnd = this.tableDataBegin
+      //}
+
+      // this.tableDataBegin.splice((this.currentPage - 1) * this.pageSize + i, 1)
+      //   this.currentPage = 1
+      //   this.totalItems = this.tableDataBegin.length
+      //   this.tableDataEnd = []
+      //   if (this.totalItems > this.pageSize) {
+      //   for (let index = 0; index < this.pageSize; index++) {
+      //     this.tableDataEnd.push(this.tableDataBegin[index])
+      //   }
+      // } else {
+      //   this.tableDataEnd = this.tableDataBegin
+      // }
+      //custId:this.tableDataBegin[(this.currentPage - 1) * this.pageSize + i].custId
       this.axios
-      .post('/crud/customer/delete',{customer:{custId:this.tableDataEnd[i].num}})
+      .post('/7979/customer/delete',{custId:this.tableDataBegin[(this.currentPage - 1) * this.pageSize + i].custId})
       .then(resp => {
+      //alert(this.tableDataBegin[(this.currentPage - 1) * this.pageSize + i].custId)
        if (resp && resp.status === 200) {
+         console.log(resp)
          console.log('----删除数据成功----')
        } else {
           console.log('----获取数据失败----')
@@ -271,25 +375,49 @@ export default {
           });          
         });
     //重新刷新页面
-    this.axios
-      .post('/crud/customer/query',{customer:{}})
+     this.getpage()
+     
+    },
+    //新增
+    addRow(){
+      this.dialogAddVisible = true
+      this.ruleForm1 = {}
+    },
+    getpage(){
+      this.axios
+      .post('/7979/customer/query',{customer:{}})
       .then(resp => {
        if (resp && resp.status === 200) {
+         //.post('/crud/customer/query',{customer:{}})
+          console.log('----获取数据成功----')
+         
           let responseData = resp.data.data.list
-          console.log(responseData)
+          // console.log(responseData)
           let tableData = []
           for (var i in responseData) {
             tableData.push({
-              num: responseData[i].custNo,
-              name: responseData[i].contactName,
-              account: responseData[i].creditCode,
-              contact_information: responseData[i].contactNo,
-              contact_place: responseData[i].address,
-              id_type:responseData[i].idType,
+              //custId: responseData[i].custId,
+              //custName: responseData[i].custName,
+              //creditCode: responseData[i].creditCode,
+              //contactName: responseData[i].contactName,
+              //address: responseData[i].address,
+              //idNo:responseData[i].idNo,
               })
               // console.log(responseData[i].roles)
             }
             this.tableDataEnd = tableData
+          //获取数据后填充页面
+          this.tableDataEnd=[]
+          this.tableDataBegin = resp.data.data.list
+          console.log(this.tableDataBegin)
+          this.totalItems = this.tableDataBegin.length
+          if (this.totalItems > this.pageSize) {
+           for (let index = 0; index < this.pageSize; index++) {
+              this.tableDataEnd.push(this.tableDataBegin[index])
+            }
+          } else {
+            this.tableDataEnd = this.tableDataBegin
+          }
         } else {
           console.log('----获取数据失败----')
         }
@@ -298,16 +426,18 @@ export default {
         console.log(error)
       });
     },
-    //新增
-    addRow(){
-      this.dialogAddVisible = true;
+    //搜索返回
+    return_page(){
+      this.tableDataName =''
+      this.tableDataEnd=[]
+      this.getpage()
     },
     //数据导出
     output(){
         var wb = XLSX.utils.table_to_book(document.querySelector('#table'))
-        var wbout = XLSrite(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+        var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
         try {
-          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '对账单.xlsx')
+          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '客户表.xlsx')
         } catch (e) {
           if (typeof console !== 'undefined') console.log(e, wbout)
         }
