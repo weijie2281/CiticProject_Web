@@ -2,30 +2,31 @@
   <div class="tradeDetailBox">
     <span class="go_back" @click="goBack">返回上一页</span>
     <div class="title">交易明细</div>
-    <div>
+<!--    <div>
       <el-form class="el-form" ref="SearchForm" :model="SearchForm" :inline="true" label-width="100px"
                label-position="left">
-        <!-- <el-form-item label="转入/转出" prop="tradeDetailFlag">
+         <el-form-item label="转入/转出" prop="tradeDetailFlag">
            <el-select v-model="SearchForm.accType" placeholder="全部收支类型" clearable>
              <el-option label="转出" value="转出"/>
              <el-option label="转入" value="转入"/>
            </el-select>
-         </el-form-item>-->
-        <el-form-item label="交易时间选择" prop="tradeDetailDate">
-          <el-select v-model="SearchForm.tradeDate" placeholder="本月" clearable>
-            <el-option label="本月" value="本月"/>
-            <el-option label="上月" value="上月"/>
-            <el-option label="今年" value="今年"/>
+         </el-form-item>
+        <el-form-item label="交易时间选择" prop="tradeDate">
+          <el-select v-model="SearchForm.tradeDate" placeholder="全部" clearable>
+            <el-option label="全部" value="1"/>
+            <el-option label="本月" value="2"/>
+            <el-option label="上月" value="3"/>
+            <el-option label="今年" value="4"/>
           </el-select>
         </el-form-item>
         <el-form-item inline-message="inline-message">
-          <el-button size="middle" type="primary" icon="el-icon-search" @click="onSearch(form)">搜索</el-button>
-          <!-- <el-button size="middle" type="primary" icon="el-icon-delete" @click="onReset">重置</el-button>
+          <el-button size="middle" type="primary" icon="el-icon-search" @click="onSearch(SearchForm)">搜索</el-button>
+           <el-button size="middle" type="primary" icon="el-icon-delete" @click="onReset">重置</el-button>
            &lt;!&ndash;  excel导出按钮  &ndash;&gt;
-           <el-button size="middle" type="primary" @click="onExport">导出EXCEL</el-button>-->
+           <el-button size="middle" type="primary" @click="onExport">导出EXCEL</el-button>
         </el-form-item>
       </el-form>
-    </div>
+    </div>-->
     <div class="tradeStatistics">
       <div>
         <span>转入账户：{{accId}}</span>
@@ -56,7 +57,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="pageObj1.currentPage"
-          :page-sizes="[5, 8, 15, 20]"
+          :page-sizes="[4, 8, 15, 20]"
           :page-size="pageObj1.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total=pageObj1.totalCount>
@@ -89,10 +90,10 @@
       </el-table>
       <div class="page">
         <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
+          @size-change="handleSizeChangeObj2"
+          @current-change="handleCurrentChangeObj2"
           :current-page="pageObj2.currentPage"
-          :page-sizes="[5, 8, 15, 20]"
+          :page-sizes="[4, 8, 15, 20]"
           :page-size="pageObj2.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total=pageObj2.totalCount>
@@ -108,20 +109,16 @@
     data() {
       return {
         pageObj1: {
-          pageSize: 5,
+          pageSize: 4,
           currentPage: 1,
           startPage: 1,
           totalCount: 20,
         },
         pageObj2: {
-          pageSize: 5,
+          pageSize: 4,
           currentPage: 1,
           startPage: 1,
           totalCount: 20,
-        },
-        SearchForm: {
-          accType: '',
-          tradeDate: ''
         },
         accId: JSON.parse(sessionStorage.getItem('detail')),
         inMoney: 0,
@@ -132,18 +129,17 @@
       }
     },
     created() {
-      this.getDetailData();
+      this.getDetailDataPre();
+      this.getDetailDataEnd();
     },
     methods: {
-      getDetailData() {
-        //加载整个页面
+      getDetailDataPre() {
         var _this = this;
         var data = {
           startPage: this.pageObj1.currentPage,
           mutiNum: this.pageObj1.pageSize,
           tradeInAccNum: JSON.parse(sessionStorage.getItem('detail')),
         };
-        console.log('页码', data)
         this.axios
           .post('/7979/trade/query', data)
           .then(resp => {
@@ -177,6 +173,10 @@
           .catch(function (error) {
             console.log(error)
           });
+      },
+      getDetailDataEnd() {
+        //加载整个页面
+        var _this = this;
         var dataOut = {
           startPage: this.pageObj2.currentPage,
           mutiNum: this.pageObj2.pageSize,
@@ -223,23 +223,23 @@
       handleSizeChange: function (val) {
         this.pageObj1.pageSize = val;
         this.pageObj1.currentPage = 1;
-        this.getDetailData();
+        this.getDetailDataPre();
       },
       // 页码变更
       handleCurrentChange: function (val) {
         this.pageObj1.currentPage = val
-        this.getDetailData();
+        this.getDetailDataPre();
       },
       // 每页显示数据量变更
       handleSizeChangeObj2: function (val) {
         this.pageObj2.pageSize = val;
         this.pageObj2.currentPage = 1;
-        this.getDetailData();
+        this.getDetailDataEnd();
       },
       // 页码变更
       handleCurrentChangeObj2: function (val) {
         this.pageObj2.currentPage = val
-        this.getDetailData();
+        this.getDetailDataEnd();
       },
     }
   }
@@ -266,17 +266,6 @@
 
   .TradeTable {
     margin: 20px;
-  }
-
-  .abbreviation {
-    display: -webkit-box;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-clamp: 1;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    height: 20px;
-    position: relative;
   }
 
   .tradeStatistics {
