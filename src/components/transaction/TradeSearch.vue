@@ -102,7 +102,7 @@
         if(value){
           if (!(/^\d+(\.(\d{0,3}))?$/g.test(value))) {
             this.$refs['form'].resetFields();
-            return callback(new Error('只能输入整数和两位小数'))
+            return callback(new Error('只能输入整数和三位小数'))
           }
         }
 
