@@ -144,10 +144,13 @@
         } else {
           //调查询接口TODO
           this.axios
-            .post('/crud/account/statement', {"custAcct": this.tableDataName})
+            // .post('/crud/account/statement', {"custAcct": this.tableDataName})
+            .post('/7979/account/statement', {"custAcct": this.tableDataName})
             .then(resp => {
-              if (resp && resp.status === 200) {
+              // if (resp && resp.status === 200) {
+              if (resp && resp.data.code === 200) {
                 this.tableData = resp.data.data
+                this.tableData.custAcct = this.tableData.custAcct.replace(/s*/g, '')
                 if (this.tableData.custAcct === this.tableDataName) {
                   this.tableData.custAcct = this.accNoFormat(this.tableData.custAcct) //客户账号
                   this.tableData.statement.forEach((value, index) => {
@@ -166,6 +169,7 @@
                 }
               } else {
                 console.log('----获取数据失败----')
+                this.$message.warning(resp.data.message);
               }
             })
             .catch(function (error) {

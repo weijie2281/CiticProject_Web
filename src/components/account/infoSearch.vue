@@ -10,7 +10,7 @@
       <el-button type="warning" icon="el-icon-refresh-left" @click="reset" round>重置</el-button>
     </div>
     <el-table id="table" :data="tableDataEnd" @selection-change="handleSelectionChange" border stripe fit highlight-current-row style="width: 100%;margin-bottom:20px;">
-      <el-table-column type="selection" width="55" align="center"></el-table-column>
+      <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
       <el-table-column prop="custAcct" label="客户账号" width="180" align="center" sortable>
         <template slot-scope="scope">{{scope.row.custAcct | accNoFormat}}</template>
       </el-table-column>
@@ -44,7 +44,7 @@
           <el-input v-model="rowInfo.acctId" disabled></el-input>
         </el-form-item>
         <el-form-item label="账户类型">
-          <el-input v-model="rowInfo.acctType == '0'? '单位': rowInfo.acctType == '1'? '个人' : '企业'" disabled></el-input>
+          <el-input v-model="rowInfo.acctType == '0'? '单位': rowInfo.acctType == '1' ? '个人' : '企业'" disabled></el-input>
         </el-form-item>
         <el-form-item label="客户账号">
           <el-input v-model="rowInfo.custAcct" disabled></el-input>
@@ -186,7 +186,8 @@
     },
     created() {
       this.axios
-        .post('/crud/account/accountIndex')
+        // .post('/crud/account/accountIndex')
+        .post('/7979/account/accountIndex')
         .then(resp => {
           if (resp && resp.status === 200) {
             this.tableDataBegin = resp.data.data
