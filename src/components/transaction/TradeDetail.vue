@@ -2,31 +2,30 @@
   <div class="tradeDetailBox">
     <span class="go_back" @click="goBack">返回上一页</span>
     <div class="title">交易明细</div>
-<!--    <div>
+    <div>
       <el-form class="el-form" ref="SearchForm" :model="SearchForm" :inline="true" label-width="100px"
                label-position="left">
-         <el-form-item label="转入/转出" prop="tradeDetailFlag">
+        <!-- <el-form-item label="转入/转出" prop="tradeDetailFlag">
            <el-select v-model="SearchForm.accType" placeholder="全部收支类型" clearable>
              <el-option label="转出" value="转出"/>
              <el-option label="转入" value="转入"/>
            </el-select>
-         </el-form-item>
+         </el-form-item>-->
         <el-form-item label="交易时间选择" prop="tradeDate">
-          <el-select v-model="SearchForm.tradeDate" placeholder="全部" clearable>
-            <el-option label="全部" value="1"/>
-            <el-option label="本月" value="2"/>
-            <el-option label="上月" value="3"/>
-            <el-option label="今年" value="4"/>
+          <el-select v-model="SearchForm.tradeDate" placeholder="全部">
+            <el-option label="全部" value="全部"/>
+            <el-option label="本月" value="本月"/>
+            <el-option label="今年" value="今年"/>
           </el-select>
         </el-form-item>
         <el-form-item inline-message="inline-message">
           <el-button size="middle" type="primary" icon="el-icon-search" @click="onSearch(SearchForm)">搜索</el-button>
-           <el-button size="middle" type="primary" icon="el-icon-delete" @click="onReset">重置</el-button>
-           &lt;!&ndash;  excel导出按钮  &ndash;&gt;
-           <el-button size="middle" type="primary" @click="onExport">导出EXCEL</el-button>
+          <!--<el-button size="middle" type="primary" icon="el-icon-delete" @click="onReset">重置</el-button>
+          &lt;!&ndash;  excel导出按钮  &ndash;&gt;
+          <el-button size="middle" type="primary" @click="onExport">导出EXCEL</el-button>-->
         </el-form-item>
       </el-form>
-    </div>-->
+    </div>
     <div class="tradeStatistics">
       <div>
         <span>转入账户：{{accId}}</span>
@@ -120,9 +119,14 @@
           startPage: 1,
           totalCount: 20,
         },
+        SearchForm: {
+          tradeDate: '全部'
+        },
         accId: JSON.parse(sessionStorage.getItem('detail')),
         inMoney: 0,
         outMoney: 0,
+        startTradeTime: '',
+        endTradeTime: '',
         DetailDataEnd: [],
         DetailDataPre: [],
         DetailData: []
@@ -139,6 +143,8 @@
           startPage: this.pageObj1.currentPage,
           mutiNum: this.pageObj1.pageSize,
           tradeInAccNum: JSON.parse(sessionStorage.getItem('detail')),
+          startTradeTime: this.startTradeTime,
+          endTradeTime: this.endTradeTime,
         };
         this.axios
           .post('/7979/trade/query', data)
@@ -163,8 +169,9 @@
                 })
               }
               if (transitionForms.length > 0) {
-                this.DetailDataPre = [];
                 this.DetailDataPre = transitionForms;
+              }else{
+                this.DetailDataPre = [];
               }
             } else {
               console.log('----获取数据失败----')
@@ -181,6 +188,8 @@
           startPage: this.pageObj2.currentPage,
           mutiNum: this.pageObj2.pageSize,
           tradeOutAccNum: JSON.parse(sessionStorage.getItem('detail')),
+          startTradeTime: this.startTradeTime,
+          endTradeTime: this.endTradeTime,
         };
         this.axios
           .post('/7979/trade/query', dataOut)
@@ -207,6 +216,8 @@
               if (transitionForms.length > 0) {
                 this.DetailDataEnd = [];
                 this.DetailDataEnd = transitionForms;
+              }else{
+                this.DetailDataEnd = [];
               }
             } else {
               console.log('----获取数据失败----')
@@ -215,6 +226,22 @@
           .catch(function (error) {
             console.log(error)
           });
+      },
+      onSearch(SearchForm) {
+        switch (SearchForm.tradeDate) {
+          case '本月':
+            this.startTradeTime = this.dateFormat(Date.now(), '月初');
+            break;
+          case '今年':
+            this.startTradeTime = this.dateFormat(Date.now(), '年初');
+            break;
+          case '全部':
+            this.startTradeTime = '';
+            break;
+        }
+        this.endTradeTime = this.dateFormat(Date.now(), 'yyyy-MM-DD h:m:s');
+        this.getDetailDataPre();
+        this.getDetailDataEnd();
       },
       goBack() {
         this.$router.back();
@@ -241,6 +268,38 @@
         this.pageObj2.currentPage = val
         this.getDetailDataEnd();
       },
+      dateFormat(date, format) {
+        //  处理时间格式的函数
+        if (date) {
+          const d = new Date(date);
+          const o = {
+            yearData: d.getFullYear(),
+            monthData: d.getMonth() + 1 < 10 ? `0${d.getMonth() + 1}` : d.getMonth() + 1,
+            dateData: d.getDate() < 10 ? `0${d.getDate()}` : d.getDate(),
+            hourData: d.getHours() < 10 ? `0${d.getHours()}` : d.getHours(),
+            minuteData: d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes(),
+            secondData: d.getSeconds() < 10 ? `0${d.getSeconds()}` : d.getSeconds()
+          };
+          switch (format) {
+            case 'yyyy-MM-DD h:m:s':
+              return `${o.yearData}-${o.monthData}-${o.dateData} ${o.hourData}:${o.minuteData}:${o.secondData}`;
+              break;
+            case 'yyyyMMDD h:m:s':
+              return `${o.yearData}${o.monthData}${o.dateData} ${o.hourData}:${o.minuteData}:${o.secondData}`;
+              break;
+            case '月初':
+              // 月初
+              return `${o.yearData}-${o.monthData}-01 00:00:00`;
+              break;
+            case '年初':
+              // 年初
+              return `${o.yearData}-01-01 00:00:00`;
+              break;
+          }
+        } else {
+          return this.$message(`暂无数据`);
+        }
+      }
     }
   }
 </script>
