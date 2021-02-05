@@ -1,3 +1,7 @@
+<!--
+交易模块-交易详情页面
+@ author zhengshifei
+-->
 <template>
   <div class="tradeDetailBox">
     <span class="go_back" @click="goBack">返回上一页</span>

@@ -1,3 +1,7 @@
+<!--
+交易模块-主页面
+@ author zhengshifei
+-->
 <template>
   <div class="transaction">
     <!-- 搜索功能 -->

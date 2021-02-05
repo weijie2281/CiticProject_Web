@@ -1,3 +1,7 @@
+<!--
+交易模块-搜索功能
+@ author zhengshifei
+-->
 <template>
   <div class="searchBar">
     <el-form class="el-form" :rules="ruleForm" ref="form" :model="form" label-width="90px"
