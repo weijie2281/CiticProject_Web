@@ -12,17 +12,18 @@
       @onExport="exportExcel"
       ref="searchBar"/>
     <!--  交易细节  -->
-    <div class="TradeTable">
+    <div style="display: inline-block">
       <el-table
         :data="tradeData"
         border
+        style="text-align: center;width: 100%"
         :default-sort="{prop: 'tradeTime',order: 'descending'}"
       >
-        <el-table-column label="序号" type="index" width="70px" align="center"/>
-        <el-table-column label="交易流水号" prop="tradeNum" width="225px" align="center"/>
-        <el-table-column label="转入账号" prop="tradeInAccNum" width="180px" align="center"/>
-        <el-table-column label="转出账号" prop="tradeOutAccNum" width="180px" align="center"/>
-        <el-table-column label="交易金额" prop="tradeMoney" width="130px" align="center"/>
+        <el-table-column label="序号" type="index" width="100" align="center"/>
+        <el-table-column label="交易流水号" prop="tradeNum" width="280" align="center"/>
+        <el-table-column label="转入账号" prop="tradeInAccNum" width="200" align="center"/>
+        <el-table-column label="转出账号" prop="tradeOutAccNum" width="200" align="center"/>
+        <el-table-column label="交易金额" prop="tradeMoney" width="150" align="center"/>
         <!--<el-table-column label="交易描述" prop="tradeDescription" width="150px" align="center">
           <template slot-scope="scope">
             <el-tooltip :content="scope.row.tradeDescription" placement="top" popper-class="tooltip">
@@ -32,9 +33,9 @@
             </el-tooltip>
           </template>
         </el-table-column>-->
-        <el-table-column label="转入/转出" prop="tradeFlag" width="90px" align="center"/>
-        <el-table-column label="交易状态" prop="tradeStatus" width="90px" align="center"/>
-        <el-table-column label="交易时间" prop="tradeTime" width="150px" align="center" sortable/>
+        <el-table-column label="转入/转出" prop="tradeFlag" width="100" align="center"/>
+        <el-table-column label="交易状态" prop="tradeStatus" width="90" align="center"/>
+        <el-table-column label="交易时间" prop="tradeTime" width="150" align="center" sortable/>
       </el-table>
       <div class="page">
           <el-pagination
@@ -48,7 +49,7 @@
         </el-pagination>
       </div>
     </div>
-  </div>
+    </div>
 </template>
 
 <script>
@@ -312,18 +313,22 @@
 
 <style scoped>
   .transaction {
-    background-color: white;
     width: 100%;
-    /*position: ;*/
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* el-table表格去掉横线 */
+   .el-table__row>td{
+    border: none;
+  }
+  .el-table::before {
+    height: 0px;
   }
 
   .searchBar {
     margin: 10px;
 
-  }
-
-  .TradeTable {
-    margin: 20px;
   }
 
   .page {

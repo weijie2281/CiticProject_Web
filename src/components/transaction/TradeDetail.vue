@@ -30,77 +30,83 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="tradeStatistics">
-      <div>
-        <span>转入账户：{{accId}}</span>
+    <div class="TradeTable">
+      <div style="display: inline-block">
+        <div class="tradeStatistics">
+          <div>
+            <span>转入账户：{{accId}}</span>
+          </div>
+          <!--      <div>-->
+          <!--        <span>当月收入总额 ：<b class="green" v-if="inMoney!==0">{{`+￥${inMoney}`}}</b>-->
+          <!--        <b v-else>0</b>-->
+          <!--        </span>-->
+          <!--      </div>-->
+        </div>
+        <el-table
+          :data="DetailDataPre"
+          border
+          style="margin-left:20px;width: 1120px"
+          :default-sort="{prop: 'tradeTime',order: 'descending'}"
+        >
+          <el-table-column label="序号" type="index" width="70" align="center"/>
+          <el-table-column label="交易流水号" prop="tradeNum" width="225" align="center"/>
+          <el-table-column label="转入账号" prop="tradeInAccNum" width="180" align="center"/>
+          <el-table-column label="转出账号" prop="tradeOutAccNum" width="180" align="center"/>
+          <el-table-column label="交易金额" prop="tradeMoney" width="130" align="center"/>
+          <el-table-column label="转入/转出" prop="tradeFlag" width="90" align="center"/>
+          <el-table-column label="交易状态" prop="tradeStatus" width="90" align="center"/>
+          <el-table-column label="交易时间" prop="tradeTime" width="150" align="center" sortable/>
+        </el-table>
+        <div class="page">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pageObj1.currentPage"
+            :page-sizes="[4, 8, 15, 20]"
+            :page-size="pageObj1.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total=pageObj1.totalCount>
+          </el-pagination>
+        </div>
       </div>
-      <!--      <div>-->
-      <!--        <span>当月收入总额 ：<b class="green" v-if="inMoney!==0">{{`+￥${inMoney}`}}</b>-->
-      <!--        <b v-else>0</b>-->
-      <!--        </span>-->
-      <!--      </div>-->
     </div>
     <div class="TradeTable">
-      <el-table
-        :data="DetailDataPre"
-        border
-        :default-sort="{prop: 'tradeTime',order: 'descending'}"
-      >
-        <el-table-column label="序号" type="index" width="70px" align="center"/>
-        <el-table-column label="交易流水号" prop="tradeNum" width="225px" align="center"/>
-        <el-table-column label="转入账号" prop="tradeInAccNum" width="180px" align="center"/>
-        <el-table-column label="转出账号" prop="tradeOutAccNum" width="180px" align="center"/>
-        <el-table-column label="交易金额" prop="tradeMoney" width="130px" align="center"/>
-        <el-table-column label="转入/转出" prop="tradeFlag" width="90px" align="center"/>
-        <el-table-column label="交易状态" prop="tradeStatus" width="90px" align="center"/>
-        <el-table-column label="交易时间" prop="tradeTime" width="150px" align="center" sortable/>
-      </el-table>
-      <div class="page">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="pageObj1.currentPage"
-          :page-sizes="[4, 8, 15, 20]"
-          :page-size="pageObj1.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total=pageObj1.totalCount>
-        </el-pagination>
-      </div>
-    </div>
-    <div class="tradeStatistics">
-      <div>
-        <span>转出账户：{{accId}}</span>
-      </div>
-      <!--      <div>-->
-      <!--        <span>当月支出总额 ：<b class="red" v-if="outMoney!==0">{{`-￥${outMoney}`}}</b>-->
-      <!--        <b v-else>0</b></span>-->
-      <!--      </div>-->
-    </div>
-    <div class="TradeTable">
-      <el-table
-        :data="DetailDataEnd"
-        border
-        :default-sort="{prop: 'tradeTime',order: 'descending'}"
-      >
-        <el-table-column label="序号" type="index" width="70px" align="center"/>
-        <el-table-column label="交易流水号" prop="tradeNum" width="225px" align="center"/>
-        <el-table-column label="转入账号" prop="tradeInAccNum" width="180px" align="center"/>
-        <el-table-column label="转出账号" prop="tradeOutAccNum" width="180px" align="center"/>
-        <el-table-column label="交易金额" prop="tradeMoney" width="130px" align="center"/>
-        <el-table-column label="交易状态" prop="tradeFlag" width="90px" align="center"/>
-        <el-table-column label="转入/转出" prop="tradeStatus" width="90px" align="center"/>
-        <el-table-column label="交易时间" prop="tradeTime" width="150px" align="center" sortable/>
-      </el-table>
-      <div class="page">
-        <el-pagination
-          @size-change="handleSizeChangeObj2"
-          @current-change="handleCurrentChangeObj2"
-          :current-page="pageObj2.currentPage"
-          :page-sizes="[4, 8, 15, 20]"
-          :page-size="pageObj2.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total=pageObj2.totalCount>
-        </el-pagination>
+      <div style="display: inline-block">
+        <div class="tradeStatistics">
+          <div>
+            <span>转出账户：{{accId}}</span>
+          </div>
+          <!--      <div>-->
+          <!--        <span>当月支出总额 ：<b class="red" v-if="outMoney!==0">{{`-￥${outMoney}`}}</b>-->
+          <!--        <b v-else>0</b></span>-->
+          <!--      </div>-->
+        </div>
+        <el-table
+          :data="DetailDataEnd"
+          border
+          style="margin-left: 20px;width: 1120px"
+          :default-sort="{prop: 'tradeTime',order: 'descending'}"
+        >
+          <el-table-column label="序号" type="index" width="70" align="center"/>
+          <el-table-column label="交易流水号" prop="tradeNum" width="225" align="center"/>
+          <el-table-column label="转入账号" prop="tradeInAccNum" width="180" align="center"/>
+          <el-table-column label="转出账号" prop="tradeOutAccNum" width="180" align="center"/>
+          <el-table-column label="交易金额" prop="tradeMoney" width="130" align="center"/>
+          <el-table-column label="交易状态" prop="tradeFlag" width="90" align="center"/>
+          <el-table-column label="转入/转出" prop="tradeStatus" width="90" align="center"/>
+          <el-table-column label="交易时间" prop="tradeTime" width="150" align="center" sortable/>
+        </el-table>
+        <div class="page">
+          <el-pagination
+            @size-change="handleSizeChangeObj2"
+            @current-change="handleCurrentChangeObj2"
+            :current-page="pageObj2.currentPage"
+            :page-sizes="[4, 8, 15, 20]"
+            :page-size="pageObj2.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total=pageObj2.totalCount>
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -328,11 +334,13 @@
   }
 
   .TradeTable {
-    margin: 20px;
+    width: 100%;
+    text-align: center;
   }
 
   .tradeStatistics {
-    padding: 5px 20px 0 20px;
+    margin: 5px 20px 0 20px;
+    text-align: left;
   }
 
   .tradeStatistics span {

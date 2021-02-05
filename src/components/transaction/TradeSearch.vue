@@ -78,13 +78,15 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item>
+    </el-form>
+    <el-row>
+      <el-col>
         <el-button size="middle" type="primary" icon="el-icon-search" @click="onSearch">搜索</el-button>
         <el-button size="middle" type="primary" icon="el-icon-delete" @click="onReset">重置</el-button>
         <!--  excel导出按钮  -->
         <el-button size="middle" type="primary" @click="onExport">导出EXCEL</el-button>
-      </el-form-item>
-    </el-form>
+      </el-col>
+    </el-row>
   </div>
 
 </template>
